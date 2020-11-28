@@ -24,11 +24,25 @@ ext {
 
 dependencies {
 
+    //Database
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.0'
+//    compile('mysql:mysql-connector-java')
+
+    //Vaadin
     implementation 'com.vaadin:vaadin-spring-boot-starter'
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.5.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.3.RELEASE'
+    compile group: 'com.vaadin', name: 'vaadin-bom', version: '17.0.10', ext: 'pom'
+    compile group: 'com.vaadin', name: 'vaadin-core', version: '17.0.10'
+
+    //Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    //Spring config
+    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.5.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.4.0'
+    compile group: 'org.hibernate.validator', name: 'hibernate-validator-annotation-processor', version: '6.1.6.Final'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.4.0', ext: 'pom'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
