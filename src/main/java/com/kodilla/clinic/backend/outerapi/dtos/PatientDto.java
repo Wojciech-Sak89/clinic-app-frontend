@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,8 +24,8 @@ public class PatientDto {
     private int telNum;
     private String email;
     private boolean inUrgency;
-    private List<Integer> appointmentsIds;
-    private List<Integer> evaluationsIds;
+    private List<Integer> appointmentsIds = new ArrayList<>();
+    private List<Integer> evaluationsIds = new ArrayList<>();
 
     public PatientDto(Integer patient_id,
                       String name,

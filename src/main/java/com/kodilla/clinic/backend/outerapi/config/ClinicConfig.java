@@ -14,6 +14,12 @@ public class ClinicConfig {
     @Value("workingDays")
     private String workingDays;
 
+    @Value("emergencyHours")
+    private String emergencyHours;
+
+    @Value("doctors")
+    private String doctors;
+
     @Value("clinicDoctorsSchedules")
     private String schedules;
 }

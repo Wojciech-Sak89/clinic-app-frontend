@@ -1,7 +1,9 @@
 package com.kodilla.clinic.backend.outerapi.client;
 
 import com.kodilla.clinic.backend.outerapi.config.ClinicConfig;
+import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.ClinicDoctorScheduleDto;
+import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +43,9 @@ public class ClinicClient {
         }
     }
 
-    public WorkingDayDto saveWorkingDay(WorkingDayDto workingDayDto) {
+    public void saveWorkingDay(WorkingDayDto workingDayDto) {
         URI url = getWorkingDaysUri();
-        return restTemplate.postForObject(url, workingDayDto, WorkingDayDto.class);
+        restTemplate.postForObject(url, workingDayDto, WorkingDayDto.class);
     }
 
     public void deleteWorkingDayById(Integer id) {
@@ -57,6 +59,38 @@ public class ClinicClient {
             LOGGER.error(e.getMessage(), e);
         }
     }
+
+    //EMERGENCY HOURS
+    public List<EmergencyHourDto> getEmergencyHours() {
+        URI url = getEmergencyHoursUri();
+
+        try {
+            Optional<EmergencyHourDto[]> emergencyHoursResponse = Optional.ofNullable(restTemplate.getForObject(url, EmergencyHourDto[].class));
+            System.out.println(url);
+            return Arrays.asList(emergencyHoursResponse.orElse(new EmergencyHourDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    public void saveEmergencyHour(EmergencyHourDto emergencyHourDto) {
+        URI url = getEmergencyHoursUri();
+        restTemplate.postForObject(url, emergencyHourDto, EmergencyHourDto.class);
+    }
+
+    public void deleteEmergencyHourById(Integer id) {
+        URI url = deleteEmergencyHourUri(id);
+        System.out.println(url);
+
+        try {
+            restTemplate.delete(url);
+            System.out.println(url);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
 
     //SCHEDULES
     public List<ClinicDoctorScheduleDto> getSchedules() {
@@ -74,9 +108,47 @@ public class ClinicClient {
         }
     }
 
-    //URIs
+    //DOCTORS
+    public void saveDoctor(DoctorDto doctorDto) {
+        System.out.println(doctorDto);
+        URI url = getDoctorsUri();
+        restTemplate.postForObject(url, doctorDto, DoctorDto.class);
+    }
+
+    public void deleteDoctorById(Integer doctor_id) {
+        URI url = deleteDoctorUri(doctor_id);
+        System.out.println("Delete doctor: " + url);
+
+        try {
+            restTemplate.delete(url);
+            System.out.println("Delete doctor: " + url);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    public List<DoctorDto> getDoctors() {
+        URI url = getDoctorsUri();
+
+        try {
+            Optional<DoctorDto[]> doctorsResponse = Optional.ofNullable(restTemplate.getForObject(url, DoctorDto[].class));
+            System.out.println("Get doctors: " + url);
+            return Arrays.asList(doctorsResponse.orElse(new DoctorDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+
+    //\\ URIs //\\
     private URI getWorkingDaysUri() {
         return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getWorkingDays())
+                .build().encode().toUri();
+    }
+
+    private URI deleteWorkingDayUri(Integer id) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getWorkingDays() + "/" + id)
                 .build().encode().toUri();
     }
 
@@ -85,8 +157,23 @@ public class ClinicClient {
                 .build().encode().toUri();
     }
 
-    private URI deleteWorkingDayUri(Integer id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getWorkingDays() + "/" + id)
+    private URI getEmergencyHoursUri() {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getEmergencyHours())
+                .build().encode().toUri();
+    }
+
+    private URI deleteEmergencyHourUri(Integer id) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getEmergencyHours() + "/" + id)
+                .build().encode().toUri();
+    }
+
+    private URI getDoctorsUri() {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getDoctors())
+                .build().encode().toUri();
+    }
+
+    private URI deleteDoctorUri(Integer id) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getDoctors() + "/" + id)
                 .build().encode().toUri();
     }
 

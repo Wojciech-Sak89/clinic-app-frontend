@@ -1,11 +1,11 @@
-package com.kodilla.clinic.ui.views.schedule;
+package com.kodilla.clinic.ui.views.forms;
 
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.enums.Hour;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.ClinicDoctorScheduleDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.MainView;
+import com.kodilla.clinic.ui.views.WorkingDaysView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -18,11 +18,6 @@ import java.util.List;
 
 public class WorkingDayForm extends FormLayout {
 
-    //    private Integer workingDay_id;
-//    private Day day;
-//    private Hour startHour;
-//    private Hour endHour;
-//    private List<Integer> schedulesIds;
     private ComboBox<Day> day = new ComboBox<>("Weekday");
     private ComboBox<Hour> startHour = new ComboBox<>("Start of work");
     private ComboBox<Hour> endHour = new ComboBox<>("End of work");
@@ -38,10 +33,10 @@ public class WorkingDayForm extends FormLayout {
 
     private ClinicService clinicService;
 
-    private MainView mainView;
+    private WorkingDaysView workingDaysView;
 
-    public WorkingDayForm(MainView mainView, ClinicService clinicService) {
-        this.mainView = mainView;
+    public WorkingDayForm(WorkingDaysView workingDaysView, ClinicService clinicService) {
+        this.workingDaysView = workingDaysView;
         this.clinicService = clinicService;
 
         binder.bindInstanceFields(this);
@@ -81,7 +76,7 @@ public class WorkingDayForm extends FormLayout {
         workingDayDto.setSchedulesIds(schedulesIds);
 
         clinicService.saveWorkingDay(workingDayDto);
-        mainView.refresh();
+        workingDaysView.refresh();
     }
 
     private void removeScheduleFromWorkingDay() {
@@ -93,20 +88,20 @@ public class WorkingDayForm extends FormLayout {
         workingDayDto.setSchedulesIds(schedulesIds);
 
         clinicService.saveWorkingDay(workingDayDto);
-        mainView.refresh();
+        workingDaysView.refresh();
     }
 
     private void save() {
         WorkingDayDto workingDayDto = binder.getBean();
         clinicService.saveWorkingDay(workingDayDto);
-        mainView.refresh();
+        workingDaysView.refresh();
         setWorkingDayDto(null);
     }
 
     private void delete() {
         WorkingDayDto workingDayDto = binder.getBean();
         clinicService.deleteWorkingDay(workingDayDto.getWorkingDay_id());
-        mainView.refresh();
+        workingDaysView.refresh();
         setWorkingDayDto(null);
     }
 

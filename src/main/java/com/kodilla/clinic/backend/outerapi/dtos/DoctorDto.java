@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,14 +16,30 @@ import java.util.List;
 @Getter
 @Setter
 public class DoctorDto {
-    private Integer doctor_id;
+    private Integer doctor_id = -1;
     private String name;
     private String surname;
     private Specialization specialization;
     private Department department;
     private String email;
-    private ClinicDoctorScheduleDto clinicDoctorScheduleDto;
+    private ClinicDoctorScheduleDto clinicDoctorScheduleDto = new ClinicDoctorScheduleDto();
     private String bio;
-    private List<Integer> appointmentsIds;
-    private List<Integer> evaluationsIds;
+    private List<Integer> appointmentsIds = new ArrayList<>();
+    private List<Integer> evaluationsIds = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "DoctorDto{" +
+                "doctor_id=" + doctor_id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", specialization=" + specialization +
+                ", department=" + department +
+                ", email='" + email + '\'' +
+                ", clinicDoctorScheduleDto=" + clinicDoctorScheduleDto +
+                ", bio='" + bio + '\'' +
+                ", appointmentsIds=" + appointmentsIds +
+                ", evaluationsIds=" + evaluationsIds +
+                '}';
+    }
 }

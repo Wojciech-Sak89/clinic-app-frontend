@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -12,7 +13,13 @@ import java.util.List;
 @Getter
 @Setter
 public class ClinicDoctorScheduleDto {
-    private Integer schedule_id;
-    private List<WorkingDayDto> workingDaysDtos;
-    private List<EmergencyHourDto> emergencyHoursDtos;
+    private Integer schedule_id = -1;
+    private List<WorkingDayDto> workingDaysDtos = new ArrayList<>();
+    private List<EmergencyHourDto> emergencyHoursDtos = new ArrayList<>();
+
+    @Override
+    public String toString() {
+            return "WORKING DAYS: \n" + workingDaysDtos +
+                "\nEMERGENCY HOURS: \n" + emergencyHoursDtos;
+    }
 }

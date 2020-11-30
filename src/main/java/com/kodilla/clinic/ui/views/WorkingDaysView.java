@@ -3,16 +3,19 @@ package com.kodilla.clinic.ui.views;
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.schedule.WorkingDayForm;
+import com.kodilla.clinic.ui.MainLayout;
+import com.kodilla.clinic.ui.views.forms.WorkingDayForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route("")
-public class MainView extends VerticalLayout {
+@Route(value = "", layout = MainLayout.class)
+@PageTitle("Working Days | Clinic App")
+public class WorkingDaysView extends VerticalLayout {
 
     private ClinicService clinicService;
     private WorkingDayForm workingDayForm;
@@ -21,7 +24,7 @@ public class MainView extends VerticalLayout {
     private Grid<WorkingDayDto> workingDayGrid = new Grid<>(WorkingDayDto.class);
     private ComboBox<Day> filter = new ComboBox<>("Filter by weekday");
 
-    public MainView(ClinicService clinicService) {
+    public WorkingDaysView(ClinicService clinicService) {
         this.clinicService = clinicService;
         workingDayForm = new WorkingDayForm(this, clinicService);
 

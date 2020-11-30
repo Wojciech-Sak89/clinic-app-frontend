@@ -20,4 +20,22 @@ public class WorkingDayDto {
     private Hour startHour;
     private Hour endHour;
     private List<Integer> schedulesIds = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return  "       " + day +
+                "\n             " + startHour + " - " + endHour + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WorkingDayDto that = (WorkingDayDto) o;
+
+        if (day != that.day) return false;
+        if (startHour != that.startHour) return false;
+        return endHour == that.endHour;
+    }
 }
