@@ -1,13 +1,23 @@
 package com.kodilla.clinic.backend.outerapi.client;
 
+import com.kodilla.clinic.backend.enums.Gender;
 import com.kodilla.clinic.backend.outerapi.config.ClinicConfig;
+import com.kodilla.clinic.backend.outerapi.dtos.AppointmentDto;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
+import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
+import com.kodilla.clinic.backend.outerapi.dtos.StaffEvaluationDto;
+import com.kodilla.clinic.backend.outerapi.dtos.medic.RecommendationDto;
+import com.kodilla.clinic.backend.outerapi.dtos.medic.SymptomDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.ClinicDoctorScheduleDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -140,8 +150,153 @@ public class ClinicClient {
         }
     }
 
+    //PATIENTS
+    public void savePatient(PatientDto patientDto) {
+        System.out.println(patientDto);
+        URI url = getPatientsUri();
+        restTemplate.postForObject(url, patientDto, PatientDto.class);
+    }
+
+    public void deletePatientById(Integer patient_id) {
+        URI url = deletePatientUri(patient_id);
+        System.out.println("Delete aptient: " + url);
+
+        try {
+            restTemplate.delete(url);
+            System.out.println("Delete patient: " + url);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    public List<PatientDto> getPatients() {
+        URI url = getPatientsUri();
+
+        try {
+            Optional<PatientDto[]> patientsResponse = Optional.ofNullable(restTemplate.getForObject(url, PatientDto[].class));
+            System.out.println("Get patients: " + url);
+            return Arrays.asList(patientsResponse.orElse(new PatientDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    //MEDIC API
+    public List<SymptomDto> getSymptoms() {
+        URI url = getSymptomsUri();
+
+        try {
+            Optional<SymptomDto[]> symptomsResponse = Optional.ofNullable(restTemplate.getForObject(url, SymptomDto[].class));
+            System.out.println("Get symptoms: " + url);
+            return Arrays.asList(symptomsResponse.orElse(new SymptomDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    public List<RecommendationDto> getRecommendations(Integer birthYear, Gender gender, int[] symptomsIdsInts) {
+        URI url = getRecommendationsUri(birthYear, gender, symptomsIdsInts);
+        System.out.println("getRecommendationsUri(): " + url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        List<Integer> integersSymptoms = new ArrayList<>(Arrays.asList((ArrayUtils.toObject(symptomsIdsInts))));
+
+        HttpEntity<Object> requestEntity = new HttpEntity<>(integersSymptoms, headers);
+
+        try {
+            Optional<RecommendationDto[]> recommendationsResponse =
+                    Optional.ofNullable(restTemplate.postForObject(url, requestEntity, RecommendationDto[].class));
+            System.out.println("Get recommendations: " + url);
+            return Arrays.asList(recommendationsResponse.orElse(new RecommendationDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    //STAFF EVALUATIONS
+    public List<StaffEvaluationDto> getStaffEvaluations() {
+        URI url = getEvaluationsUri();
+
+        try {
+            Optional<StaffEvaluationDto[]> evaluationsResponse = Optional.ofNullable(restTemplate.getForObject(url, StaffEvaluationDto[].class));
+            System.out.println("Get evaluations: " + url);
+            return Arrays.asList(evaluationsResponse.orElse(new StaffEvaluationDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    public void saveStaffEvaluation(StaffEvaluationDto staffEvaluationDto) {
+        System.out.println(staffEvaluationDto);
+        URI url = getEvaluationsUri();
+        restTemplate.postForObject(url, staffEvaluationDto, PatientDto.class);
+    }
+
+    public void deleteStaffEvaluationById(Integer evaluation_id) {
+        URI url = deleteEvaluationUri(evaluation_id);
+        System.out.println("Delete evaluation: " + url);
+
+        try {
+            restTemplate.delete(url);
+            System.out.println("Delete evaluation: " + url);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    //APPOINTMENTS
+    public List<AppointmentDto> getAppointments() {
+        URI url = getAppointmentsUri();
+
+        try {
+            Optional<AppointmentDto[]> evaluationsResponse = Optional.ofNullable(restTemplate.getForObject(url, AppointmentDto[].class));
+            System.out.println("Get appointments: " + url);
+            return Arrays.asList(evaluationsResponse.orElse(new AppointmentDto[0]));
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    public void saveAppointment(AppointmentDto appointmentDto) {
+        System.out.println(appointmentDto);
+        URI url = getAppointmentsUri();
+        restTemplate.postForObject(url, appointmentDto, AppointmentDto.class);
+    }
+
+    public void deleteAppointmentById(Integer appointment_id) {
+        URI url = deleteAppointmentUri(appointment_id);
+        System.out.println("Delete appointment: " + url);
+
+        try {
+            restTemplate.delete(url);
+            System.out.println("Delete appointment: " + url);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
 
     //\\ URIs //\\
+    private URI getSymptomsUri() {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getSymptoms())
+                .build().encode().toUri();
+    }
+
+    private URI getRecommendationsUri(Integer birthYear, Gender gender, int[] symptomsIdsInts) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getRecommendations())
+                .queryParam("birthYear", birthYear)
+                .queryParam("gender", gender)
+                .query("symptoms=" + Arrays.toString(symptomsIdsInts))
+                .build().encode().toUri();
+    }
+
     private URI getWorkingDaysUri() {
         return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getWorkingDays())
                 .build().encode().toUri();
@@ -177,43 +332,33 @@ public class ClinicClient {
                 .build().encode().toUri();
     }
 
+    private URI getPatientsUri() {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getPatients())
+                .build().encode().toUri();
+    }
 
+    private URI deletePatientUri(Integer id) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getPatients() + "/" + id)
+                .build().encode().toUri();
+    }
 
-//    public CreatedTrelloCardDto createNewCard(TrelloCardDto trelloCardDto) {
-//
-//        URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
-//                .queryParam("key", trelloConfig.getTrelloAppKey())
-//                .queryParam("token", trelloConfig.getTrelloToken())
-//                .queryParam("name", trelloCardDto.getName())
-//                .queryParam("desc", trelloCardDto.getDescription())
-//                .queryParam("pos", trelloCardDto.getPos())
-//                .queryParam("idList", trelloCardDto.getListId()).build().encode().toUri();
-//
-//        return restTemplate.postForObject(url, null, CreatedTrelloCardDto.class);
-//    }
+    private URI getEvaluationsUri() {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getStaffEvaluations())
+                .build().encode().toUri();
+    }
 
+    private URI deleteEvaluationUri(Integer id) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getStaffEvaluations() + "/" + id)
+                .build().encode().toUri();
+    }
 
-//    public List<SpecialisationDto> getSpecialisations(int birthYear, Gender gender, int[] symptomsIds) throws Exception {
-//        URI url = getSpecialisationsUri(birthYear, gender, symptomsIds);
-//        System.out.println(url);
-//
-//        try {
-//            Optional<SpecialisationDto[]> specialisationsResponse = Optional.ofNullable(restTemplate.getForObject(url, SpecialisationDto[].class));
-//            System.out.println(url);
-//            return Arrays.asList(specialisationsResponse.orElse(new SpecialisationDto[0]));
-//        } catch (RestClientException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            return new ArrayList<>();
-//        }
-//    }
-//    private URI getSpecialisationsUri(int birthYear, Gender gender, int[] symptomsIds) throws Exception {
-//        return UriComponentsBuilder.fromHttpUrl(medicConfig.getMedicApiEndpoint() + medicConfig.getSpecialisations())
-//                .queryParam("token", medicConfig.getToken())
-//                .queryParam("format", medicConfig.getFormat())
-//                .queryParam("language", medicConfig.getLanguage())
-//                .queryParam("year_of_birth", birthYear)
-//                .queryParam("gender", gender)
-//                .query("symptoms=" + Arrays.toString(symptomsIds))
-//                .build().encode().toUri();
-//    }
+    private URI getAppointmentsUri() {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getAppointments())
+                .build().encode().toUri();
+    }
+
+    private URI deleteAppointmentUri(Integer appointment_id) {
+        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getAppointments() + "/" + appointment_id)
+                .build().encode().toUri();
+    }
 }

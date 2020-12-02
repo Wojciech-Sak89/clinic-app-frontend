@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,13 @@ import java.util.List;
 @Getter
 @Setter
 public class PatientDto {
-    private Integer patient_id;
+    private Integer patient_id = -1;
     private String name;
     private String surname;
     private String address;
     private LocalDate birthDate;
-    private int pesel;
-    private int telNum;
+    private BigDecimal pesel;
+    private BigDecimal telNum;
     private String email;
     private boolean inUrgency;
     private List<Integer> appointmentsIds = new ArrayList<>();
@@ -31,8 +32,8 @@ public class PatientDto {
                       String name,
                       String surname,
                       String address,
-                      int pesel,
-                      int telNum,
+                      BigDecimal pesel,
+                      BigDecimal telNum,
                       String email,
                       boolean inUrgency,
                       List<Integer> appointmentsIds,
@@ -47,5 +48,22 @@ public class PatientDto {
         this.inUrgency = inUrgency;
         this.appointmentsIds = appointmentsIds;
         this.evaluationsIds = evaluationsIds;
+    }
+
+    @Override
+    public String toString() {
+        return "PatientDto{" +
+                "patient_id=" + patient_id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", address='" + address + '\'' +
+                ", birthDate=" + birthDate +
+                ", pesel=" + pesel +
+                ", telNum=" + telNum +
+                ", email='" + email + '\'' +
+                ", inUrgency=" + inUrgency +
+                ", appointmentsIds=" + appointmentsIds +
+                ", evaluationsIds=" + evaluationsIds +
+                '}';
     }
 }

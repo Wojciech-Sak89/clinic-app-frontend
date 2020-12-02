@@ -51,12 +51,29 @@ public class MainLayout extends AppLayout {
         RouterLink patientsLink = new RouterLink("ADMIN - Patients", PatientsView.class);
         patientsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
+        RouterLink evaluationLink = new RouterLink("ADMIN - Staff evaluations", StaffEvaluationsView.class);
+        evaluationLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+        RouterLink appointmentsLink = new RouterLink("ADMIN - Appointments", AppointmentsView.class);
+        appointmentsLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+        RouterLink recommendationLink = new RouterLink("PATIENT - Specialist recommendation", RecommendationFormView.class);
+        recommendationLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+        RouterLink opinionLink = new RouterLink("PATIENT - Opinion", PatientEvaluatesFormView.class);
+        opinionLink.setHighlightCondition(HighlightConditions.sameLocation());
+
         addToDrawer(new VerticalLayout(
                 workingDaysLink,
                 emergencyHoursLink,
                 doctorsLink,
                 docSchedulesLink,
-                patientsLink
+                patientsLink,
+                evaluationLink,
+                appointmentsLink,
+
+                recommendationLink,
+                opinionLink
         ));
     }
 }
