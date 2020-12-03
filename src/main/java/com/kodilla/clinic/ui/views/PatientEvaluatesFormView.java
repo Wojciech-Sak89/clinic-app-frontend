@@ -166,7 +166,6 @@ public class PatientEvaluatesFormView extends FormLayout {
                 "Doctor: " + clinicService.getDoctorById(evaluation.getDoctor_Id()).getName()
                         + " " + clinicService.getDoctorById(evaluation.getDoctor_Id()).getSurname());
 
-//        staffEvaluationGrid.setItems(clinicService.getStaffEvaluations());
         setColumnNames(staffEvaluationGrid);
 
         staffEvaluationGrid.setWidth("80em");

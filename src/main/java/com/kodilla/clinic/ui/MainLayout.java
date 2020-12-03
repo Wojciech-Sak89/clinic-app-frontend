@@ -63,6 +63,9 @@ public class MainLayout extends AppLayout {
         RouterLink opinionLink = new RouterLink("PATIENT - Opinion", PatientEvaluatesFormView.class);
         opinionLink.setHighlightCondition(HighlightConditions.sameLocation());
 
+        RouterLink reserveDoctorAppointmentLink = new RouterLink("PATIENT - Book doctor appointment", BookDoctorAppointmentFormView.class);
+        reserveDoctorAppointmentLink.setHighlightCondition(HighlightConditions.sameLocation());
+
         addToDrawer(new VerticalLayout(
                 workingDaysLink,
                 emergencyHoursLink,
@@ -73,7 +76,8 @@ public class MainLayout extends AppLayout {
                 appointmentsLink,
 
                 recommendationLink,
-                opinionLink
+                opinionLink,
+                reserveDoctorAppointmentLink
         ));
     }
 }

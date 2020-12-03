@@ -233,4 +233,13 @@ public class ClinicService {
     public void deleteAppointment(Integer appointment_id) {
         clinicClient.deleteAppointmentById(appointment_id);
     }
+
+    public List<AppointmentDto> getAppointments_ByPatientId(Integer patient_id) {
+        if (clinicClient.getAppointments() != null) {
+            return clinicClient.getAppointments().stream()
+                    .filter(appointmentDto -> appointmentDto.getPatientId().equals(patient_id))
+                    .collect(Collectors.toList());
+        } else
+            return new ArrayList<>();
+    }
 }
