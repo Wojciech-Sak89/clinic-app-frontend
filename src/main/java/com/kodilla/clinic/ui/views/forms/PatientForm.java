@@ -2,7 +2,7 @@ package com.kodilla.clinic.ui.views.forms;
 
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.PatientsView;
+import com.kodilla.clinic.ui.views.admin.PatientsView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -11,7 +11,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 

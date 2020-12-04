@@ -1,4 +1,4 @@
-package com.kodilla.clinic.ui.views;
+package com.kodilla.clinic.ui.views.patient;
 
 import ch.qos.logback.core.Layout;
 import com.kodilla.clinic.backend.enums.Stars;

@@ -1,6 +1,9 @@
 package com.kodilla.clinic.ui;
 
-import com.kodilla.clinic.ui.views.*;
+import com.kodilla.clinic.ui.views.admin.*;
+import com.kodilla.clinic.ui.views.patient.BookAppointmentFormView;
+import com.kodilla.clinic.ui.views.patient.PatientEvaluatesFormView;
+import com.kodilla.clinic.ui.views.patient.RecommendationFormView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -63,7 +66,7 @@ public class MainLayout extends AppLayout {
         RouterLink opinionLink = new RouterLink("PATIENT - Opinion", PatientEvaluatesFormView.class);
         opinionLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink reserveDoctorAppointmentLink = new RouterLink("PATIENT - Book doctor appointment", BookDoctorAppointmentFormView.class);
+        RouterLink reserveDoctorAppointmentLink = new RouterLink("PATIENT - Book doctor appointment", BookAppointmentFormView.class);
         reserveDoctorAppointmentLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(

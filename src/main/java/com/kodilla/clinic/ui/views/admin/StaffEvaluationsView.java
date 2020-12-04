@@ -1,4 +1,4 @@
-package com.kodilla.clinic.ui.views;
+package com.kodilla.clinic.ui.views.admin;
 
 import com.kodilla.clinic.backend.enums.Stars;
 import com.kodilla.clinic.backend.outerapi.dtos.StaffEvaluationDto;

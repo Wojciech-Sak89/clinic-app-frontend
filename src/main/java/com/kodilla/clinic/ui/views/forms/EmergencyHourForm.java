@@ -4,7 +4,7 @@ import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.enums.Hour;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.EmergencyHoursView;
+import com.kodilla.clinic.ui.views.admin.EmergencyHoursView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;

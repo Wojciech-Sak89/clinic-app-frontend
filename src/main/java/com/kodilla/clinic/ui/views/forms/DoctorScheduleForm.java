@@ -5,7 +5,7 @@ import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.DoctorScheduleView;
+import com.kodilla.clinic.ui.views.admin.DoctorScheduleView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -18,7 +18,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
-import javax.swing.*;
 import java.util.List;
 
 public class DoctorScheduleForm extends FormLayout {

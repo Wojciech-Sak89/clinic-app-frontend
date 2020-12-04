@@ -1,4 +1,4 @@
-package com.kodilla.clinic.ui.views;
+package com.kodilla.clinic.ui.views.admin;
 
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
 import com.kodilla.clinic.backend.service.ClinicService;

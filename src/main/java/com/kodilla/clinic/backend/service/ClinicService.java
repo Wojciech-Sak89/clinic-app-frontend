@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,6 +121,8 @@ public class ClinicService {
     public DoctorDto getDoctorById(Integer doctor_id) {
         if (clinicClient.getDoctors() != null) {
             return clinicClient.getDoctors().stream()
+                    .filter(Objects::nonNull)
+                    .filter(doctorDto -> Objects.nonNull(doctorDto.getDoctor_id()))
                     .filter(doctorDto -> doctorDto.getDoctor_id().equals(doctor_id))
                     .findFirst()
                     .get();
@@ -165,6 +168,8 @@ public class ClinicService {
     public PatientDto getPatientById(Integer patient_id) {
         if (clinicClient.getPatients() != null) {
             return clinicClient.getPatients().stream()
+                    .filter(Objects::nonNull)
+                    .filter(patientDto -> Objects.nonNull(patientDto.getPatient_id()))
                     .filter(patientDto -> patientDto.getPatient_id().equals(patient_id))
                     .findFirst()
                     .get();
@@ -237,9 +242,51 @@ public class ClinicService {
     public List<AppointmentDto> getAppointments_ByPatientId(Integer patient_id) {
         if (clinicClient.getAppointments() != null) {
             return clinicClient.getAppointments().stream()
+                    .filter(Objects::nonNull)
+                    .filter(appointmentDto -> Objects.nonNull(appointmentDto.getPatientId()))
                     .filter(appointmentDto -> appointmentDto.getPatientId().equals(patient_id))
                     .collect(Collectors.toList());
         } else
             return new ArrayList<>();
+    }
+
+    public List<AppointmentDto> getAppointments_ByDoctorId(Integer doctor_id) {
+        if (clinicClient.getAppointments() != null) {
+            return clinicClient.getAppointments().stream()
+                    .filter(Objects::nonNull)
+                    .filter(appointmentDto -> Objects.nonNull(appointmentDto.getDoctorId()))
+                    .filter(appointmentDto -> appointmentDto.getDoctorId().equals(doctor_id))
+                    .collect(Collectors.toList());
+        } else
+            return new ArrayList<>();
+    }
+
+    public List<AppointmentDto> getAppointments_ByStatus_And_ByPatientId(Integer patient_id, Visits visits) {
+        Status status = getStatus(visits);
+
+        if (clinicClient.getAppointments() != null) {
+            return clinicClient.getAppointments().stream()
+                    .filter(Objects::nonNull)
+                    .filter(appointmentDto -> Objects.nonNull(appointmentDto.getPatientId()))
+                    .filter(appointmentDto -> Objects.nonNull(appointmentDto.getStatus()))
+                    .filter(appointmentDto -> appointmentDto.getPatientId().equals(patient_id))
+                    .filter(appointmentDto -> appointmentDto.getStatus().equals(status))
+                    .collect(Collectors.toList());
+        } else
+            return new ArrayList<>();
+
+    }
+
+    private Status getStatus(Visits value) {
+        Status status = Status.FOR_EMERGENCY_ONLY;
+        switch (value) {
+            case PAST:
+                status = Status.CLOSED;
+                break;
+            case FORTHCOMING:
+                status = Status.RESERVED;
+                break;
+        }
+        return status;
     }
 }

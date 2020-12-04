@@ -4,7 +4,7 @@ import com.kodilla.clinic.backend.enums.Department;
 import com.kodilla.clinic.backend.enums.Specialization;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.DoctorsView;
+import com.kodilla.clinic.ui.views.admin.DoctorsView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;

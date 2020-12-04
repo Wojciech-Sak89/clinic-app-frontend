@@ -1,4 +1,4 @@
-package com.kodilla.clinic.ui.views;
+package com.kodilla.clinic.ui.views.patient;
 
 import com.kodilla.clinic.backend.enums.Gender;
 import com.kodilla.clinic.backend.outerapi.dtos.medic.SymptomDto;

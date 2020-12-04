@@ -5,7 +5,7 @@ import com.kodilla.clinic.backend.outerapi.dtos.AppointmentDto;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.AppointmentsView;
+import com.kodilla.clinic.ui.views.admin.AppointmentsView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
