@@ -38,4 +38,13 @@ public class WorkingDayDto {
         if (startHour != that.startHour) return false;
         return endHour == that.endHour;
     }
+
+    @Override
+    public int hashCode() {
+        int result = workingDay_id.hashCode();
+        result = 31 * result + day.hashCode();
+        result = 31 * result + startHour.hashCode();
+        result = 31 * result + endHour.hashCode();
+        return result;
+    }
 }

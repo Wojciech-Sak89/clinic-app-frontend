@@ -42,4 +42,24 @@ public class DoctorDto {
                 ", evaluationsIds=" + evaluationsIds +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DoctorDto doctorDto = (DoctorDto) o;
+
+        if (!name.equals(doctorDto.name)) return false;
+        if (!surname.equals(doctorDto.surname)) return false;
+        return email.equals(doctorDto.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + surname.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
+    }
 }

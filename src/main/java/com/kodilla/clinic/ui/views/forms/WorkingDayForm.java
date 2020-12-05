@@ -10,7 +10,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 
@@ -21,13 +24,10 @@ public class WorkingDayForm extends FormLayout {
     private ComboBox<Day> day = new ComboBox<>("Weekday");
     private ComboBox<Hour> startHour = new ComboBox<>("Start of work");
     private ComboBox<Hour> endHour = new ComboBox<>("End of work");
-    private ComboBox<ClinicDoctorScheduleDto> schedules = new ComboBox<>("Schedules Ids");
 
     private Button saveButton = new Button("Save");
     private Button deleteButton = new Button("Delete");
-
-    private Button addToScheduleButton = new Button("Add to schedule");
-    private Button removeFromScheduleButton = new Button("Remove from schedule");
+    private Button cancelButton = new Button("Cancel");
 
     private Binder<WorkingDayDto> binder = new BeanValidationBinder<>(WorkingDayDto.class);
 
@@ -44,63 +44,55 @@ public class WorkingDayForm extends FormLayout {
         day.setItems(Day.values());
         startHour.setItems(Hour.values());
         endHour.setItems(Hour.values());
-        schedules.setItems(clinicService.getSchedules());
-        schedules.setItemLabelGenerator(schedule -> String.valueOf(schedule.getSchedule_id()));
 
         clearForm();
 
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
-        HorizontalLayout scheduleButtons = new HorizontalLayout(addToScheduleButton, removeFromScheduleButton);
+        buttons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.BASELINE);
 
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.addClickListener(event -> save());
 
         deleteButton.addClickListener(event -> delete());
 
-        addToScheduleButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
-        addToScheduleButton.addClickListener(event -> addScheduleToWorkingDay());
+        cancelButton.addClickListener(event -> this.setVisible(false));
 
-        removeFromScheduleButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        removeFromScheduleButton.addClickListener(event -> removeScheduleFromWorkingDay());
+        VerticalLayout formMainLayout = new VerticalLayout(day, startHour, endHour, buttons, cancelButton);
 
-        add(day, startHour, endHour, buttons, schedules, scheduleButtons);
-    }
-
-    private void addScheduleToWorkingDay() {
-        WorkingDayDto workingDayDto = binder.getBean();
-        System.out.println("Selected Schedule_ID value: " + schedules.getValue().getSchedule_id());
-
-        List<Integer> schedulesIds = workingDayDto.getSchedulesIds();
-        schedulesIds.add(schedules.getValue().getSchedule_id());
-
-        workingDayDto.setSchedulesIds(schedulesIds);
-
-        clinicService.saveWorkingDay(workingDayDto);
-        workingDaysView.refresh();
-    }
-
-    private void removeScheduleFromWorkingDay() {
-        WorkingDayDto workingDayDto = binder.getBean();
-
-        List<Integer> schedulesIds = workingDayDto.getSchedulesIds();
-        schedulesIds.remove(schedules.getValue().getSchedule_id());
-
-        workingDayDto.setSchedulesIds(schedulesIds);
-
-        clinicService.saveWorkingDay(workingDayDto);
-        workingDaysView.refresh();
+        add(formMainLayout);
     }
 
     private void save() {
         WorkingDayDto workingDayDto = binder.getBean();
-        clinicService.saveWorkingDay(workingDayDto);
+
+        List<WorkingDayDto> allWorkingDays = clinicService.getWorkingDays();
+        if (!allWorkingDays.contains(workingDayDto)) {
+            clinicService.saveWorkingDay(workingDayDto);
+        } else {
+            Notification.show("This working day is already defined!");
+        }
+
         workingDaysView.refresh();
         setWorkingDayDto(null);
     }
 
     private void delete() {
         WorkingDayDto workingDayDto = binder.getBean();
-        clinicService.deleteWorkingDay(workingDayDto.getWorkingDay_id());
+
+        List<WorkingDayDto> allWorkingDays = clinicService.getWorkingDays();
+        WorkingDayDto dayToDelete = allWorkingDays.stream()
+                .filter(workingDayDto_oneOfAll -> workingDayDto_oneOfAll.equals(workingDayDto))
+                .findAny()
+                .get();
+
+        int dayToDelete_DependetnSchedules = dayToDelete.getSchedulesIds().size();
+
+        if (dayToDelete_DependetnSchedules == 0) {
+            clinicService.deleteWorkingDay(workingDayDto.getWorkingDay_id());
+        } else {
+            Notification.show("Cannot be deleted, used in schedule(s). Action: delete from schedule(s) using it.");
+        }
+
         workingDaysView.refresh();
         setWorkingDayDto(null);
     }

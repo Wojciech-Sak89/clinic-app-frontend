@@ -40,21 +40,23 @@ public class DoctorsView extends VerticalLayout {
             doctorForm.setDoctorDto(new DoctorDto());
         });
 
+        doctorGrid.asSingleSelect()
+                .addValueChangeListener(
+                        event -> doctorForm.setDoctorDto(doctorGrid.asSingleSelect().getValue()));
+
         HorizontalLayout toolbar = new HorizontalLayout(filter, addDoctorButton);
         toolbar.setDefaultVerticalComponentAlignment(Alignment.END);
 
-        HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, doctorForm);
+        VerticalLayout toolbarGridLayout = new VerticalLayout(toolbar, doctorGrid);
+
+        HorizontalLayout mainContent = new HorizontalLayout(doctorForm, toolbarGridLayout);
         mainContent.setSizeFull();
 
         doctorForm.setDoctorDto(null);
 
-        add(toolbar, mainContent);
+        add(mainContent);
         setSizeFull();
         refresh();
-
-        doctorGrid.asSingleSelect()
-                .addValueChangeListener(
-                        event -> doctorForm.setDoctorDto(doctorGrid.asSingleSelect().getValue()));
     }
 
     private void update() {

@@ -22,7 +22,7 @@ public class EmergencyHourDto {
 
     @Override
     public String toString() {
-        return  "       " + day + ": " + hour;
+        return  "       " + day + ": " + hour + "\n";
     }
 
     @Override

@@ -28,8 +28,9 @@ public class WorkingDaysView extends VerticalLayout {
         this.clinicService = clinicService;
         workingDayForm = new WorkingDayForm(this, clinicService);
 
-        workingDayGrid.setColumns("workingDay_id", "day", "startHour", "endHour", "schedulesIds");
+        workingDayGrid.setColumns("day", "startHour", "endHour");
         setColumnNames(workingDayGrid);
+        workingDayGrid.setMaxWidth("45em");
 
         filter.setPlaceholder("Moday, Tuesday...");
         filter.setClearButtonVisible(true);

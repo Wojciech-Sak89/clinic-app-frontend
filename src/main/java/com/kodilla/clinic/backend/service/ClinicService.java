@@ -1,6 +1,5 @@
 package com.kodilla.clinic.backend.service;
 
-import ch.qos.logback.core.Appender;
 import com.kodilla.clinic.backend.enums.*;
 import com.kodilla.clinic.backend.outerapi.client.ClinicClient;
 import com.kodilla.clinic.backend.outerapi.dtos.AppointmentDto;

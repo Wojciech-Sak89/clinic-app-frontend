@@ -104,75 +104,93 @@ public class DoctorScheduleForm extends FormLayout {
         modLayout.add(workingDaysModLayout, emHoursModLayout, cancelButton);
         modLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, cancelButton);
 
-        add(name, surname, specialization, email, schedule, modLayout);
+        VerticalLayout formLayout = new VerticalLayout(name, surname, specialization, email, schedule);
+        schedule.setMinWidth("25em");
+
+        HorizontalLayout formModLayout = new HorizontalLayout(formLayout, modLayout);
+        formModLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.AUTO);
+
+        add(formModLayout);
     }
 
     private void addWorkingDayToDoctorSchedule() {
         DoctorDto doctorDto = binder.getBean();
-        System.out.println("Selected Schedule_ID value: " + workingDayComboBox.getValue());
 
-        List<WorkingDayDto> workingDaysDtos =
+        List<WorkingDayDto> docAllWorkingDays =
                 doctorDto.getClinicDoctorScheduleDto().getWorkingDaysDtos();
-        WorkingDayDto workingDayDto = workingDayComboBox.getValue();
-        workingDayDto.setWorkingDay_id(-1);
-        workingDaysDtos.add(workingDayDto);
+        WorkingDayDto workingDayDto;
 
-        doctorDto.getClinicDoctorScheduleDto().setWorkingDaysDtos(workingDaysDtos);
-        doctorDto.getClinicDoctorScheduleDto().setSchedule_id(-1);
+        if (!workingDayComboBox.isEmpty()) {
+            workingDayDto = workingDayComboBox.getValue();
 
-        clinicService.saveDoctor(doctorDto);
+            if (!docAllWorkingDays.contains(workingDayDto)) {
+                docAllWorkingDays.add(workingDayDto);
+                doctorDto.getClinicDoctorScheduleDto().setWorkingDaysDtos(docAllWorkingDays);
+                clinicService.saveDoctor(doctorDto);
+            }
+        }
+
         initScheduleData();
         this.setVisible(true);
     }
 
     private void removeWorkingDayFromDoctorSchedule() {
         DoctorDto doctorDto = binder.getBean();
-        System.out.println("Selected Schedule_ID value: " + workingDayComboBox.getValue());
 
         List<WorkingDayDto> workingDaysDtos =
                 doctorDto.getClinicDoctorScheduleDto().getWorkingDaysDtos();
-        WorkingDayDto workingDayToRemove = workingDayComboBox.getValue();
-        workingDaysDtos.removeIf(workingDay -> workingDay.equals(workingDayToRemove));
+        WorkingDayDto workingDayToRemove;
 
-        doctorDto.getClinicDoctorScheduleDto().setWorkingDaysDtos(workingDaysDtos);
-        doctorDto.getClinicDoctorScheduleDto().setSchedule_id(-1);
+        if (!workingDayComboBox.isEmpty()) {
+            workingDayToRemove = workingDayComboBox.getValue();
+            workingDaysDtos.removeIf(workingDay -> workingDay.equals(workingDayToRemove));
+            doctorDto.getClinicDoctorScheduleDto().setWorkingDaysDtos(workingDaysDtos);
+            clinicService.saveDoctor(doctorDto);
+        }
 
-        clinicService.saveDoctor(doctorDto);
         initScheduleData();
         this.setVisible(true);
     }
 
     private void addEmergencyHourToDoctorSchedule() {
         DoctorDto doctorDto = binder.getBean();
-        System.out.println("Selected Schedule_ID value: " + workingDayComboBox.getValue());
 
-        List<EmergencyHourDto> emergencyHourDtosList =
+        List<EmergencyHourDto> docAllEmergencyHours =
                 doctorDto.getClinicDoctorScheduleDto().getEmergencyHoursDtos();
-        EmergencyHourDto emergencyHourDto = emergencyHourComboBox.getValue();
-        emergencyHourDto.setEmergencyHour_id(-1);
-        emergencyHourDtosList.add(emergencyHourDto);
+        EmergencyHourDto emergencyHourDto;
 
-        doctorDto.getClinicDoctorScheduleDto().setEmergencyHoursDtos(emergencyHourDtosList);
-        doctorDto.getClinicDoctorScheduleDto().setSchedule_id(-1);
+        if (!emergencyHourComboBox.isEmpty()) {
+            emergencyHourDto = emergencyHourComboBox.getValue();
 
-        clinicService.saveDoctor(doctorDto);
+            if (!docAllEmergencyHours.contains(emergencyHourDto)) {
+                docAllEmergencyHours.add(emergencyHourDto);
+                doctorDto.getClinicDoctorScheduleDto().setEmergencyHoursDtos(docAllEmergencyHours);
+                clinicService.saveDoctor(doctorDto);
+            }
+        }
+
         initScheduleData();
         this.setVisible(true);
     }
 
     private void removeEmergencyHourFromDoctorSchedule() {
         DoctorDto doctorDto = binder.getBean();
-        System.out.println("Selected Schedule_ID value: " + workingDayComboBox.getValue());
 
-        List<EmergencyHourDto> emergencyHourDtosList =
+        List<EmergencyHourDto> docAllEmergencyHours =
                 doctorDto.getClinicDoctorScheduleDto().getEmergencyHoursDtos();
-        EmergencyHourDto emergencyHourDtoToRemove = emergencyHourComboBox.getValue();
-        emergencyHourDtosList.removeIf(emergencyHour -> emergencyHour.equals(emergencyHourDtoToRemove));
+        EmergencyHourDto emergencyHourDtoToRemove;
 
-        doctorDto.getClinicDoctorScheduleDto().setEmergencyHoursDtos(emergencyHourDtosList);
-        doctorDto.getClinicDoctorScheduleDto().setSchedule_id(-1);
+        if (!emergencyHourComboBox.isEmpty()) {
+            emergencyHourDtoToRemove = emergencyHourComboBox.getValue();
+            docAllEmergencyHours.removeIf(emergencyHour -> emergencyHour.equals(emergencyHourDtoToRemove));
+            doctorDto.getClinicDoctorScheduleDto().setEmergencyHoursDtos(docAllEmergencyHours);
 
-        clinicService.saveDoctor(doctorDto);
+//            System.out.println("removeEmergencyHourFromDoctorSchedule() - updated data: " +
+//                    doctorDto.getClinicDoctorScheduleDto().getEmergencyHoursDtos());
+
+            clinicService.saveDoctor(doctorDto);
+        }
+
         initScheduleData();
         this.setVisible(true);
     }
@@ -200,19 +218,4 @@ public class DoctorScheduleForm extends FormLayout {
     private void clearForm() {
         this.binder.setBean(new DoctorDto());
     }
-
-//    private void save() {
-//        DoctorDto doctorDto = binder.getBean();
-//
-//        clinicService.saveDoctor(doctorDto);
-//        doctorScheduleView.refresh();
-//        setDoctorDto(null);
-//    }
-//
-//    private void delete() {
-//        DoctorDto doctorDto = binder.getBean();
-//        clinicService.deleteDoctor(doctorDto.getDoctor_id());
-//        doctorScheduleView.refresh();
-//        setDoctorDto(null);
-//    }
 }

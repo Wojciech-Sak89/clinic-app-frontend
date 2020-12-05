@@ -120,7 +120,7 @@ public class ClinicClient {
 
     //DOCTORS
     public void saveDoctor(DoctorDto doctorDto) {
-        System.out.println(doctorDto);
+//        System.out.println("ClinicClient.saveDoctor(DoctorDto doctorDto): " + doctorDto);
         URI url = getDoctorsUri();
         restTemplate.postForObject(url, doctorDto, DoctorDto.class);
     }

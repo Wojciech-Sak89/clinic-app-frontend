@@ -3,14 +3,20 @@ package com.kodilla.clinic.ui.views.forms;
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.enums.Hour;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
+import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
 import com.kodilla.clinic.ui.views.admin.EmergencyHoursView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+
+import java.util.List;
 
 public class EmergencyHourForm extends FormLayout {
 
@@ -19,6 +25,7 @@ public class EmergencyHourForm extends FormLayout {
 
     private Button saveButton = new Button("Save");
     private Button deleteButton = new Button("Delete");
+    private Button cancelButton = new Button("Cancel");
 
     private Binder<EmergencyHourDto> binder = new Binder<>(EmergencyHourDto.class);
 
@@ -34,33 +41,55 @@ public class EmergencyHourForm extends FormLayout {
 
         day.setItems(Day.values());
         hour.setItems(Hour.values());
+        hour.setMinWidth("20em");
 
         clearForm();
 
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
+        buttons.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.BASELINE);
 
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.addClickListener(event -> save());
 
         deleteButton.addClickListener(event -> delete());
 
-        add(day, hour, buttons);
+        cancelButton.addClickListener(event -> this.setVisible(false));
+
+        VerticalLayout emergencyLayout = new VerticalLayout(day, hour, buttons, cancelButton);
+        add(emergencyLayout);
     }
 
     private void save() {
         EmergencyHourDto emergencyHourDto = binder.getBean();
 
-        System.out.println("EmergencyHourForm.save() DAY : " + emergencyHourDto.getDay());
-        System.out.println("EmergencyHourForm.save() HOUR : " + emergencyHourDto.getHour());
+        List<EmergencyHourDto> allEmergencyHours = clinicService.getEmergencyHours();
+        if (!allEmergencyHours.contains(emergencyHourDto)) {
+            clinicService.saveEmergencyHour(emergencyHourDto);
+        } else {
+            Notification.show("This Emergency Hour is already defined!");
+        }
 
-        clinicService.saveEmergencyHour(emergencyHourDto);
         emergencyHoursView.refresh();
         setEmergencyHourDto(null);
     }
 
     private void delete() {
         EmergencyHourDto emergencyHourDto = binder.getBean();
-        clinicService.deleteEmergencyHour(emergencyHourDto.getEmergencyHour_id());
+
+        List<EmergencyHourDto> allEmergencyHours = clinicService.getEmergencyHours();
+        EmergencyHourDto hourToDelete = allEmergencyHours.stream()
+                .filter(emergencyHourDto_oneOfAll -> emergencyHourDto_oneOfAll.equals(emergencyHourDto))
+                .findAny()
+                .get();
+
+        int hourToDelete_DependentSchedules = hourToDelete.getSchedulesIds().size();
+
+        if (hourToDelete_DependentSchedules == 0) {
+            clinicService.deleteEmergencyHour(emergencyHourDto.getEmergencyHour_id());
+        } else {
+            Notification.show("Cannot be deleted, used in schedule(s). Action: delete from schedule(s) using it.");
+        }
+
         emergencyHoursView.refresh();
         setEmergencyHourDto(null);
     }

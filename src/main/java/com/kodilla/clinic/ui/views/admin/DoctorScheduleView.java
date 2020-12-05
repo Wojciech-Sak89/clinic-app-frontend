@@ -38,8 +38,15 @@ public class DoctorScheduleView extends VerticalLayout {
         addScheduleButton.addClickListener(e -> {
             doctorGrid.asSingleSelect().clear();
             doctorScheduleForm.setDoctorDto(new DoctorDto());
-//            doctorScheduleForm.initSchedulaData();
         });
+
+        doctorGrid.asSingleSelect()
+                .addValueChangeListener(
+                        event -> {
+                            doctorScheduleForm.setDoctorDto(doctorGrid.asSingleSelect().getValue());
+                            doctorScheduleForm.initScheduleData();
+                        });
+        doctorGrid.setMaxWidth("65em");
 
         HorizontalLayout toolbar = new HorizontalLayout(filter, addScheduleButton);
         toolbar.setDefaultVerticalComponentAlignment(Alignment.END);
@@ -53,12 +60,7 @@ public class DoctorScheduleView extends VerticalLayout {
         setSizeFull();
         refresh();
 
-        doctorGrid.asSingleSelect()
-                .addValueChangeListener(
-                        event -> {
-                            doctorScheduleForm.setDoctorDto(doctorGrid.asSingleSelect().getValue());
-                            doctorScheduleForm.initScheduleData();
-                        });
+
     }
 
     private void update() {

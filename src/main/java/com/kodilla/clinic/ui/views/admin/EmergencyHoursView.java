@@ -29,6 +29,7 @@ public class EmergencyHoursView extends VerticalLayout {
 
         emergencyHourGrid.setColumns("day", "hour");
         setColumnNames(emergencyHourGrid);
+        emergencyHourGrid.setMaxWidth("25em");
 
         filter.setPlaceholder("Moday, Tuesday...");
         filter.setClearButtonVisible(true);
@@ -36,9 +37,13 @@ public class EmergencyHoursView extends VerticalLayout {
         filter.setItems(Day.values());
 
         addEmHourButton.addClickListener(e -> {
-            emergencyHourGrid.asSingleSelect().clear(); //???
+            emergencyHourGrid.asSingleSelect().clear();
             emergencyHourForm.setEmergencyHourDto(new EmergencyHourDto());
         });
+
+        emergencyHourGrid.asSingleSelect()
+                .addValueChangeListener(
+                        event -> emergencyHourForm.setEmergencyHourDto(emergencyHourGrid.asSingleSelect().getValue()));
 
         HorizontalLayout toolbar = new HorizontalLayout(filter, addEmHourButton);
         toolbar.setDefaultVerticalComponentAlignment(Alignment.END);
@@ -51,10 +56,6 @@ public class EmergencyHoursView extends VerticalLayout {
         add(toolbar, mainContent);
         setSizeFull();
         refresh();
-
-        emergencyHourGrid.asSingleSelect()
-                .addValueChangeListener(
-                        event -> emergencyHourForm.setEmergencyHourDto(emergencyHourGrid.asSingleSelect().getValue()));
     }
 
     private void update() {
