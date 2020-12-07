@@ -21,11 +21,11 @@ Frontend in Vaadin for private clinic. Diploma project prepared during Kodilla b
   - Design and implement at least one scheduler usage.
 4. Save records to database
   - Implement at least 10 different data writing operations to the database.
-5 Tests
+5. Tests
   - Create tests covering at least 65% of the code.
-6 Design Patterns
+6. Design Patterns
   - Use at least two different design patterns.
-7 View layer
+7. View layer
   - Use the Vaadin library to create a view layer of your application.
   
 ### Ad. 1
