@@ -34,7 +34,7 @@ The most important functionality is the ability to sign up for visits to doctors
     - Use the Vaadin library to create a view layer of your application.
   
 ### Ad. 1
-  The system consists of 37 endpoints ready to use. Frontend effectively uses at least 25 of them with all known HTTP methods used at least once: GET, POST, PUT and DELETE.
+  The system consists of 37 endpoints ready to use. Frontend effectively uses at least 20 of them with all known HTTP methods used at least once: GET, POST, PUT and DELETE.
 
 ### Ad. 2
   System uses:
