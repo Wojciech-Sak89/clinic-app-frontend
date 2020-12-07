@@ -89,6 +89,11 @@ public class ClinicClient {
         restTemplate.postForObject(url, emergencyHourDto, EmergencyHourDto.class);
     }
 
+    public void updateEmergencyHour(EmergencyHourDto emergencyHourDto) {
+        URI url = getEmergencyHoursUri();
+        restTemplate.put(url, emergencyHourDto);
+    }
+
     public void deleteEmergencyHourById(Integer id) {
         URI url = deleteEmergencyHourUri(id);
         System.out.println(url);
@@ -120,7 +125,6 @@ public class ClinicClient {
 
     //DOCTORS
     public void saveDoctor(DoctorDto doctorDto) {
-//        System.out.println("ClinicClient.saveDoctor(DoctorDto doctorDto): " + doctorDto);
         URI url = getDoctorsUri();
         restTemplate.postForObject(url, doctorDto, DoctorDto.class);
     }

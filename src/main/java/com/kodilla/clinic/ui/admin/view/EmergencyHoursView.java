@@ -1,10 +1,10 @@
-package com.kodilla.clinic.ui.views.admin;
+package com.kodilla.clinic.ui.admin.view;
 
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
 import com.kodilla.clinic.backend.service.ClinicService;
 import com.kodilla.clinic.ui.MainLayout;
-import com.kodilla.clinic.ui.views.forms.EmergencyHourForm;
+import com.kodilla.clinic.ui.admin.form.EmergencyHourForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;

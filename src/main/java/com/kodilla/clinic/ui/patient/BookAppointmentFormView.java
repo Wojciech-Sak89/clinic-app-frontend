@@ -1,4 +1,4 @@
-package com.kodilla.clinic.ui.views.patient;
+package com.kodilla.clinic.ui.patient;
 
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.enums.Specialization;
@@ -9,16 +9,19 @@ import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
 import com.kodilla.clinic.backend.service.ClinicService;
 import com.kodilla.clinic.ui.MainLayout;
+import com.kodilla.clinic.ui.patient.grid.ScheduledAppointmentsGridView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -60,9 +63,6 @@ public class BookAppointmentFormView extends FormLayout {
     private Grid<AppointmentDto> patientScheduledAppointmentsGrid = new Grid<>(AppointmentDto.class);
 
     private TextField patientAppointmentToCancelTextField = new TextField("Visit");
-    private Button cancelAppointmentButton = new Button("Cancel this visit");
-
-    private Button hidePatientAppointmentsButton = new Button("Hide");
 
     private VerticalLayout patientScheduledAppointmentsLayout;
 
@@ -92,12 +92,14 @@ public class BookAppointmentFormView extends FormLayout {
         chooseSpecializationComboBox.addValueChangeListener(event -> updateChooseDoctorCombobox());
         chooseSpecializationComboBox.setClearButtonVisible(true);
 
+
         chooseDoctorComboBox.setItems(clinicService.getDoctors());
         chooseDoctorComboBox.setItemLabelGenerator(doctorDto ->
                 doctorDto.getName() + " " + doctorDto.getSurname() + " M.D. " +
                         "Specialization: " + doctorDto.getSpecialization());
         chooseDoctorComboBox.addValueChangeListener(event -> updateChooseAppointmentCombobox());
         chooseDoctorComboBox.setClearButtonVisible(true);
+        chooseDoctorComboBox.setRequired(true);
 
         myAppointmentsButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         myAppointmentsButton.addClickListener(event -> setVisible_myScheduledAppointmentsLayout());
@@ -132,7 +134,14 @@ public class BookAppointmentFormView extends FormLayout {
                 peselSignInLayout, decisionPreparationLayout_LowerPart, bookingLayout);
 
                 //SCHEDULED APPOINTMENTS GRID
-        patientScheduledAppointmentsLayout = getPatientScheduledAppointmentsLayout();
+//        patientScheduledAppointmentsLayout = getPatientScheduledAppointmentsLayout();
+        patientScheduledAppointmentsLayout = new ScheduledAppointmentsGridView(
+                filterMyAppointmentsByTime,
+                patientScheduledAppointmentsGrid,
+                patientAppointmentToCancelTextField,
+                clinicService,
+                this);
+
         patientScheduledAppointmentsLayout.setVisible(false);
 
 
@@ -146,7 +155,7 @@ public class BookAppointmentFormView extends FormLayout {
                 bookingLayout.setVisible(true);
                 doctorAppointmentsLayout.setVisible(true);
                 doctorAppointmentsGrid.setItems(
-                        clinicService.getAppointments_ByDoctorId(chooseDoctorComboBox.getValue().getDoctor_id()));
+                        clinicService.getAppointments_ByDoctorId_OpenOrReserved(chooseDoctorComboBox.getValue().getDoctor_id()));
             }
         });
 
@@ -171,6 +180,7 @@ public class BookAppointmentFormView extends FormLayout {
         });
         chooseAppointmentComboBox.setClearButtonVisible(true);
         chooseAppointmentComboBox.setMinWidth("26em");
+        chooseAppointmentComboBox.setRequired(true);
 
         reserveButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         reserveButton.addClickListener(event -> makeReservation());
@@ -247,6 +257,8 @@ public class BookAppointmentFormView extends FormLayout {
 
             patientScheduledAppointmentsGrid.setItems(
                     clinicService.getAppointments_ByPatientId(currPatient.getPatient_id()));
+        } else {
+            Notification.show("Patient with this PESEL number not found. Please try enter valid PESEL number.");
         }
     }
 
@@ -270,10 +282,15 @@ public class BookAppointmentFormView extends FormLayout {
         hideDoctorsAppointmentsButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         hideDoctorsAppointmentsButton.addClickListener(event -> this.doctorAppointmentsLayout.setVisible(false));
 
-        doctorAppointmentsGrid.setColumns("status", "dateTime");
+        doctorAppointmentsGrid.setColumns("status");
+        doctorAppointmentsGrid.addColumn(new LocalDateTimeRenderer<>(
+                AppointmentDto::getDateTime,
+                "dd.MM.yyyy HH:mm")
+        ).setHeader("Visit time");
         doctorAppointmentsGrid.addColumn(appointmentDto ->
-                "Dr " + clinicService.getDoctorById(appointmentDto.getDoctorId()).getSurname() + " | " +
-                        clinicService.getDoctorById(appointmentDto.getDoctorId()).getSpecialization());
+                clinicService.getDoctorById(appointmentDto.getDoctorId()).getSurname() + " | " +
+                        clinicService.getDoctorById(appointmentDto.getDoctorId()).getSpecialization())
+        .setHeader("Doctor");
 
         setColumnNames_ScheduledAppointments(doctorAppointmentsGrid);
 
@@ -287,58 +304,7 @@ public class BookAppointmentFormView extends FormLayout {
         return doctorAppointmentsLayout;
     }
 
-    private VerticalLayout getPatientScheduledAppointmentsLayout() {
-        VerticalLayout myScheduledAppointmentsLayout = new VerticalLayout();
-
-        patientAppointmentToCancelTextField.setReadOnly(true);
-
-        hidePatientAppointmentsButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
-        hidePatientAppointmentsButton.addClickListener(event -> myScheduledAppointmentsLayout.setVisible(false));
-
-        cancelAppointmentButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        cancelAppointmentButton.addClickListener(event -> cancelAppointment());
-
-        filterMyAppointmentsByTime.setPlaceholder("Past, Forthcoming...");
-        filterMyAppointmentsByTime.setClearButtonVisible(true);
-        filterMyAppointmentsByTime.addValueChangeListener(e -> updatePatientScheduledAppointments());
-        filterMyAppointmentsByTime.setItems(Visits.values());
-
-        VerticalLayout filter_Hide = new VerticalLayout(filterMyAppointmentsByTime, hidePatientAppointmentsButton);
-        VerticalLayout thisAppointment_Cancel = new VerticalLayout(patientAppointmentToCancelTextField, cancelAppointmentButton);
-
-        HorizontalLayout layoutTop = new HorizontalLayout(filter_Hide, thisAppointment_Cancel);
-        thisAppointment_Cancel.setHorizontalComponentAlignment(FlexComponent.Alignment.BASELINE);
-
-        patientScheduledAppointmentsGrid.setColumns("status", "dateTime");
-        patientScheduledAppointmentsGrid.addColumn(appointmentDto ->
-                "Patient: " + clinicService.getPatientById(appointmentDto.getPatientId()).getName()
-                        + " " + clinicService.getPatientById(appointmentDto.getPatientId()).getSurname());
-        patientScheduledAppointmentsGrid.addColumn(appointmentDto ->
-                "Dr " + clinicService.getDoctorById(appointmentDto.getDoctorId()).getSurname() + " | " +
-                        clinicService.getDoctorById(appointmentDto.getDoctorId()).getSpecialization());
-
-        setColumnNames_ScheduledAppointments(patientScheduledAppointmentsGrid);
-
-        patientScheduledAppointmentsGrid.asSingleSelect()
-                .addValueChangeListener(
-                        event -> {
-                            AppointmentDto gridCurrVal = patientScheduledAppointmentsGrid.asSingleSelect().getValue();
-                            if (!patientScheduledAppointmentsGrid.asSingleSelect().isEmpty()) {
-                                patientAppointmentToCancelTextField.setValue(
-                                        "Dr " + clinicService.getDoctorById(gridCurrVal.getDoctorId()).getSurname() + " | Specialization: " +
-                                                clinicService.getDoctorById(gridCurrVal.getDoctorId()).getSpecialization() +
-                                                " | Visit time: " + gridCurrVal.getDateTime());
-                            }
-                        });
-        patientAppointmentToCancelTextField.setMinWidth("40em");
-
-        patientScheduledAppointmentsGrid.setMinWidth("90em");
-
-        myScheduledAppointmentsLayout.add(layoutTop, patientScheduledAppointmentsGrid);
-        return myScheduledAppointmentsLayout;
-    }
-
-    private void cancelAppointment() {
+    public void cancelAppointment() {
         AppointmentDto appointmentDto = patientScheduledAppointmentsGrid.asSingleSelect().getValue();
         patientAppointmentToCancelTextField.clear();
         patientScheduledAppointmentsGrid.deselectAll();
@@ -353,7 +319,7 @@ public class BookAppointmentFormView extends FormLayout {
         updateChooseAppointmentCombobox();
     }
 
-    private void updatePatientScheduledAppointments() {
+    public void updatePatientScheduledAppointments() {
         if (filterMyAppointmentsByTime.isEmpty()) {
             refreshGrid_PatientScheduledAppointments();
         } else {
@@ -367,7 +333,7 @@ public class BookAppointmentFormView extends FormLayout {
         if (!chooseDoctorComboBox.isEmpty()) {
             doctorAppointmentsGrid.getDataProvider().refreshAll();
             doctorAppointmentsGrid.setItems(
-                    clinicService.getAppointments_ByDoctorId(chooseDoctorComboBox.getValue().getDoctor_id()));
+                    clinicService.getAppointments_ByDoctorId_OpenOrReserved(chooseDoctorComboBox.getValue().getDoctor_id()));
         }
 
     }
@@ -377,7 +343,7 @@ public class BookAppointmentFormView extends FormLayout {
                 clinicService.getAppointments_ByPatientId(currPatient.getPatient_id()));
     }
 
-    private void setColumnNames_ScheduledAppointments(Grid<AppointmentDto> grid) {
+    public void setColumnNames_ScheduledAppointments(Grid<AppointmentDto> grid) {
         String propertyId1 = "status";
         Grid.Column<AppointmentDto> col1 = grid.getColumnByKey(propertyId1);
 

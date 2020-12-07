@@ -1,9 +1,9 @@
 package com.kodilla.clinic.ui;
 
-import com.kodilla.clinic.ui.views.admin.*;
-import com.kodilla.clinic.ui.views.patient.BookAppointmentFormView;
-import com.kodilla.clinic.ui.views.patient.PatientEvaluatesFormView;
-import com.kodilla.clinic.ui.views.patient.RecommendationFormView;
+import com.kodilla.clinic.ui.admin.view.*;
+import com.kodilla.clinic.ui.patient.BookAppointmentFormView;
+import com.kodilla.clinic.ui.patient.PatientEvaluatesFormView;
+import com.kodilla.clinic.ui.patient.RecommendationFormView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;

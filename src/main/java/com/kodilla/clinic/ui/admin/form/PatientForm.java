@@ -1,14 +1,15 @@
-package com.kodilla.clinic.ui.views.forms;
+package com.kodilla.clinic.ui.admin.form;
 
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.admin.PatientsView;
+import com.kodilla.clinic.ui.admin.view.PatientsView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -27,6 +28,7 @@ public class PatientForm extends FormLayout {
 
     private Button saveButton = new Button("Save");
     private Button deleteButton = new Button("Delete");
+    private Button cancelButton = new Button("Cancel");
 
     private Binder<PatientDto> binder = new Binder<>(PatientDto.class);
 
@@ -52,7 +54,11 @@ public class PatientForm extends FormLayout {
 
         deleteButton.addClickListener(event -> delete());
 
-        add(name, surname, address, birthDate, pesel, telNum, email, inUrgency, buttons);
+        cancelButton.addClickListener(event -> this.setVisible(false));
+
+        VerticalLayout formLayout = new VerticalLayout(
+                name, surname, address, birthDate, pesel, telNum, email, inUrgency, buttons, cancelButton);
+        add(formLayout);
     }
 
     private void save() {

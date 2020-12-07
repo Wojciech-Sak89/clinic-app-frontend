@@ -63,6 +63,10 @@ public class ClinicService {
         clinicClient.saveEmergencyHour(emergencyHourDto);
     }
 
+    public void updateEmergencyHour(EmergencyHourDto emergencyHourDto) {
+        clinicClient.updateEmergencyHour(emergencyHourDto);
+    }
+
     public void deleteEmergencyHour(Integer emergencyHour_id) {
         clinicClient.deleteEmergencyHourById(emergencyHour_id);
     }
@@ -255,6 +259,19 @@ public class ClinicService {
                     .filter(Objects::nonNull)
                     .filter(appointmentDto -> Objects.nonNull(appointmentDto.getDoctorId()))
                     .filter(appointmentDto -> appointmentDto.getDoctorId().equals(doctor_id))
+                    .collect(Collectors.toList());
+        } else
+            return new ArrayList<>();
+    }
+
+    public List<AppointmentDto> getAppointments_ByDoctorId_OpenOrReserved(Integer doctor_id) {
+        if (clinicClient.getAppointments() != null) {
+            return clinicClient.getAppointments().stream()
+                    .filter(Objects::nonNull)
+                    .filter(appointmentDto -> Objects.nonNull(appointmentDto.getDoctorId()))
+                    .filter(appointmentDto -> appointmentDto.getDoctorId().equals(doctor_id))
+                    .filter(appointmentDto -> !appointmentDto.getStatus().equals(Status.CLOSED))
+                    .filter(appointmentDto -> !appointmentDto.getStatus().equals(Status.FOR_EMERGENCY_ONLY))
                     .collect(Collectors.toList());
         } else
             return new ArrayList<>();

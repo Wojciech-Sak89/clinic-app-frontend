@@ -1,11 +1,10 @@
-package com.kodilla.clinic.ui.views.forms;
+package com.kodilla.clinic.ui.admin.form;
 
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.enums.Hour;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
-import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.admin.EmergencyHoursView;
+import com.kodilla.clinic.ui.admin.view.EmergencyHoursView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -40,7 +39,11 @@ public class EmergencyHourForm extends FormLayout {
         binder.bindInstanceFields(this);
 
         day.setItems(Day.values());
+        day.setClearButtonVisible(true);
+        day.setRequired(true);
         hour.setItems(Hour.values());
+        hour.setClearButtonVisible(true);
+        hour.setRequired(true);
         hour.setMinWidth("20em");
 
         clearForm();
@@ -60,17 +63,34 @@ public class EmergencyHourForm extends FormLayout {
     }
 
     private void save() {
-        EmergencyHourDto emergencyHourDto = binder.getBean();
-
-        List<EmergencyHourDto> allEmergencyHours = clinicService.getEmergencyHours();
-        if (!allEmergencyHours.contains(emergencyHourDto)) {
-            clinicService.saveEmergencyHour(emergencyHourDto);
-        } else {
-            Notification.show("This Emergency Hour is already defined!");
+        if (!day.isEmpty() && !hour.isEmpty()) {
+            EmergencyHourDto emergencyHourDto = binder.getBean();
+            if (emergencyHourDto.getEmergencyHour_id() != null) {
+                update(emergencyHourDto);
+            } else {
+                List<EmergencyHourDto> allEmergencyHours = clinicService.getEmergencyHours();
+                if (!allEmergencyHours.contains(emergencyHourDto)) {
+                    clinicService.saveEmergencyHour(emergencyHourDto);
+                } else {
+                    Notification.show("This Emergency Hour is already defined!");
+                }
+            }
         }
 
         emergencyHoursView.refresh();
         setEmergencyHourDto(null);
+    }
+
+    private void update(EmergencyHourDto emergencyHourDto) {
+        System.out.println(
+                "EmergencyHourForm.update(): " + emergencyHourDto + " ID: "  + emergencyHourDto.getEmergencyHour_id());
+
+        List<EmergencyHourDto> allEmergencyHours = clinicService.getEmergencyHours();
+        if (!allEmergencyHours.contains(emergencyHourDto)) {
+            clinicService.updateEmergencyHour(emergencyHourDto);
+        } else {
+            Notification.show("This Emergency Hour is already defined!");
+        }
     }
 
     private void delete() {

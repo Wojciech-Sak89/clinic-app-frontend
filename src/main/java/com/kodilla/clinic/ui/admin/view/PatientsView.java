@@ -1,9 +1,9 @@
-package com.kodilla.clinic.ui.views.admin;
+package com.kodilla.clinic.ui.admin.view;
 
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
 import com.kodilla.clinic.backend.service.ClinicService;
 import com.kodilla.clinic.ui.MainLayout;
-import com.kodilla.clinic.ui.views.forms.PatientForm;
+import com.kodilla.clinic.ui.admin.form.PatientForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -41,21 +41,23 @@ public class PatientsView extends VerticalLayout {
             patientForm.setPatientDto(new PatientDto());
         });
 
+        patientGrid.asSingleSelect()
+                .addValueChangeListener(
+                        event -> patientForm.setPatientDto(patientGrid.asSingleSelect().getValue()));
+
         HorizontalLayout toolbar = new HorizontalLayout(filter, addPatientButton);
         toolbar.setDefaultVerticalComponentAlignment(Alignment.END);
 
-        HorizontalLayout mainContent = new HorizontalLayout(patientGrid, patientForm);
+        VerticalLayout toolbarGridLayout = new VerticalLayout(toolbar, patientGrid);
+
+        HorizontalLayout mainContent = new HorizontalLayout(patientForm, toolbarGridLayout);
         mainContent.setSizeFull();
 
         patientForm.setPatientDto(null);
 
-        add(toolbar, mainContent);
+        add(mainContent);
         setSizeFull();
         refresh();
-
-        patientGrid.asSingleSelect()
-                .addValueChangeListener(
-                        event -> patientForm.setPatientDto(patientGrid.asSingleSelect().getValue()));
     }
 
     private void update() {

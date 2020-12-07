@@ -35,11 +35,4 @@ public class ClinicDoctorScheduleDto {
             return false;
         return Objects.equals(emergencyHoursDtos, that.emergencyHoursDtos);
     }
-
-    @Override
-    public int hashCode() {
-        int result = workingDaysDtos != null ? workingDaysDtos.hashCode() : 0;
-        result = 31 * result + (emergencyHoursDtos != null ? emergencyHoursDtos.hashCode() : 0);
-        return result;
-    }
 }

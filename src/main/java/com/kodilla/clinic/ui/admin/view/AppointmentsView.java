@@ -1,13 +1,13 @@
-package com.kodilla.clinic.ui.views.admin;
-
+package com.kodilla.clinic.ui.admin.view;
 import com.kodilla.clinic.backend.outerapi.dtos.AppointmentDto;
 import com.kodilla.clinic.backend.service.ClinicService;
 import com.kodilla.clinic.ui.MainLayout;
-import com.kodilla.clinic.ui.views.forms.AppointmentsForm;
+import com.kodilla.clinic.ui.admin.form.AppointmentsForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -24,8 +24,12 @@ public class AppointmentsView extends VerticalLayout {
         this.clinicService = clinicService;
         appointmentsForm = new AppointmentsForm(this, clinicService);
 
-        appointmentGrid.setColumns("patientId", "doctorId", "status", "forEmergency", "dateTime");
+        appointmentGrid.setColumns("patientId", "doctorId", "status", "forEmergency");
         setColumnNames(appointmentGrid);
+        appointmentGrid.addColumn(new LocalDateTimeRenderer<>(
+                AppointmentDto::getDateTime,
+                "dd.MM.yyyy HH:mm")
+        ).setHeader("Visit time");
 
         addAppointmentButton.addClickListener(e -> {
             appointmentGrid.asSingleSelect().clear();

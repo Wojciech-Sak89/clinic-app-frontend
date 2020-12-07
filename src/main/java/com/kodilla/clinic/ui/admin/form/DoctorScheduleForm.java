@@ -1,11 +1,11 @@
-package com.kodilla.clinic.ui.views.forms;
+package com.kodilla.clinic.ui.admin.form;
 
 import com.kodilla.clinic.backend.enums.Specialization;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.EmergencyHourDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.admin.DoctorScheduleView;
+import com.kodilla.clinic.ui.admin.view.DoctorScheduleView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -60,10 +60,14 @@ public class DoctorScheduleForm extends FormLayout {
         workingDayComboBox.setItems(clinicService.getWorkingDays());
         workingDayComboBox.setItemLabelGenerator(workingDayDto ->
                 workingDayDto.getDay() + ": " + workingDayDto.getStartHour() + " - " + workingDayDto.getEndHour());
+        workingDayComboBox.setClearButtonVisible(true);
+        workingDayComboBox.setMinWidth("23em");
 
         emergencyHourComboBox.setItems(clinicService.getEmergencyHours());
         emergencyHourComboBox.setItemLabelGenerator(emergencyHourDto ->
                 emergencyHourDto.getDay() + ": " + emergencyHourDto.getHour());
+        emergencyHourComboBox.setClearButtonVisible(true);
+        emergencyHourComboBox.setMinWidth("18em");
 
 
         binder.bindInstanceFields(this);
@@ -184,9 +188,6 @@ public class DoctorScheduleForm extends FormLayout {
             emergencyHourDtoToRemove = emergencyHourComboBox.getValue();
             docAllEmergencyHours.removeIf(emergencyHour -> emergencyHour.equals(emergencyHourDtoToRemove));
             doctorDto.getClinicDoctorScheduleDto().setEmergencyHoursDtos(docAllEmergencyHours);
-
-//            System.out.println("removeEmergencyHourFromDoctorSchedule() - updated data: " +
-//                    doctorDto.getClinicDoctorScheduleDto().getEmergencyHoursDtos());
 
             clinicService.saveDoctor(doctorDto);
         }

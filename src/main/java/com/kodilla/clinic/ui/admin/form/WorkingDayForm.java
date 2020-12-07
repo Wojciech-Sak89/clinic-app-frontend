@@ -1,11 +1,10 @@
-package com.kodilla.clinic.ui.views.forms;
+package com.kodilla.clinic.ui.admin.form;
 
 import com.kodilla.clinic.backend.enums.Day;
 import com.kodilla.clinic.backend.enums.Hour;
-import com.kodilla.clinic.backend.outerapi.dtos.schedule.ClinicDoctorScheduleDto;
 import com.kodilla.clinic.backend.outerapi.dtos.schedule.WorkingDayDto;
 import com.kodilla.clinic.backend.service.ClinicService;
-import com.kodilla.clinic.ui.views.admin.WorkingDaysView;
+import com.kodilla.clinic.ui.admin.view.WorkingDaysView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -42,8 +41,14 @@ public class WorkingDayForm extends FormLayout {
         binder.bindInstanceFields(this);
 
         day.setItems(Day.values());
+        day.setClearButtonVisible(true);
+        day.setRequired(true);
         startHour.setItems(Hour.values());
+        startHour.setClearButtonVisible(true);
+        startHour.setRequired(true);
         endHour.setItems(Hour.values());
+        endHour.setClearButtonVisible(true);
+        endHour.setRequired(true);
 
         clearForm();
 
@@ -63,13 +68,15 @@ public class WorkingDayForm extends FormLayout {
     }
 
     private void save() {
-        WorkingDayDto workingDayDto = binder.getBean();
+        if(!day.isEmpty() && !startHour.isEmpty() && !endHour.isEmpty()) {
+            WorkingDayDto workingDayDto = binder.getBean();
 
-        List<WorkingDayDto> allWorkingDays = clinicService.getWorkingDays();
-        if (!allWorkingDays.contains(workingDayDto)) {
-            clinicService.saveWorkingDay(workingDayDto);
-        } else {
-            Notification.show("This working day is already defined!");
+            List<WorkingDayDto> allWorkingDays = clinicService.getWorkingDays();
+            if (!allWorkingDays.contains(workingDayDto)) {
+                clinicService.saveWorkingDay(workingDayDto);
+            } else {
+                Notification.show("This working day is already defined!");
+            }
         }
 
         workingDaysView.refresh();

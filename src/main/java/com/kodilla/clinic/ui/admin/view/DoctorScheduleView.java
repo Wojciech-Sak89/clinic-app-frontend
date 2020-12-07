@@ -1,10 +1,10 @@
-package com.kodilla.clinic.ui.views.admin;
+package com.kodilla.clinic.ui.admin.view;
 
-import com.kodilla.clinic.backend.enums.Department;
+import com.kodilla.clinic.backend.enums.Specialization;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.service.ClinicService;
 import com.kodilla.clinic.ui.MainLayout;
-import com.kodilla.clinic.ui.views.forms.DoctorForm;
+import com.kodilla.clinic.ui.admin.form.DoctorScheduleForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,57 +13,61 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "doctors", layout = MainLayout.class)
-@PageTitle("Doctors | Clinic App")
-public class DoctorsView extends VerticalLayout {
+@Route(value = "doctorsSchedules", layout = MainLayout.class)
+@PageTitle("Doctors Schedules | Clinic App")
+public class DoctorScheduleView extends VerticalLayout {
     private ClinicService clinicService;
-    private DoctorForm doctorForm;
-    private Button addDoctorButton = new Button("Add doctor");
+    private DoctorScheduleForm doctorScheduleForm;
+    private Button addScheduleButton = new Button("Modify schedule");
 
     private Grid<DoctorDto> doctorGrid = new Grid<>(DoctorDto.class);
-    private ComboBox<Department> filter = new ComboBox<>("Filter by department");
+    private ComboBox<Specialization> filter = new ComboBox<>("Filter by specialization");
 
-    public DoctorsView(ClinicService clinicService) {
+    public DoctorScheduleView(ClinicService clinicService) {
         this.clinicService = clinicService;
-        doctorForm = new DoctorForm(this, clinicService);
+        doctorScheduleForm = new DoctorScheduleForm(this, clinicService);
 
-        doctorGrid.setColumns("name", "surname", "specialization", "department", "email", "bio");
+        doctorGrid.setColumns("name", "surname", "specialization", "email");
         setColumnNames(doctorGrid);
 
-        filter.setPlaceholder("Departments...");
+        filter.setPlaceholder("Specializations...");
         filter.setClearButtonVisible(true);
         filter.addValueChangeListener(e -> update());
-        filter.setItems(Department.values());
+        filter.setItems(Specialization.values());
 
-        addDoctorButton.addClickListener(e -> {
+        addScheduleButton.addClickListener(e -> {
             doctorGrid.asSingleSelect().clear();
-            doctorForm.setDoctorDto(new DoctorDto());
+            doctorScheduleForm.setDoctorDto(new DoctorDto());
         });
 
         doctorGrid.asSingleSelect()
                 .addValueChangeListener(
-                        event -> doctorForm.setDoctorDto(doctorGrid.asSingleSelect().getValue()));
+                        event -> {
+                            doctorScheduleForm.setDoctorDto(doctorGrid.asSingleSelect().getValue());
+                            doctorScheduleForm.initScheduleData();
+                        });
+        doctorGrid.setMaxWidth("65em");
 
-        HorizontalLayout toolbar = new HorizontalLayout(filter, addDoctorButton);
+        HorizontalLayout toolbar = new HorizontalLayout(filter, addScheduleButton);
         toolbar.setDefaultVerticalComponentAlignment(Alignment.END);
 
-        VerticalLayout toolbarGridLayout = new VerticalLayout(toolbar, doctorGrid);
-
-        HorizontalLayout mainContent = new HorizontalLayout(doctorForm, toolbarGridLayout);
+        HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, doctorScheduleForm);
         mainContent.setSizeFull();
 
-        doctorForm.setDoctorDto(null);
+        doctorScheduleForm.setDoctorDto(null);
 
-        add(mainContent);
+        add(toolbar, mainContent);
         setSizeFull();
         refresh();
+
+
     }
 
     private void update() {
         if(filter.isEmpty()) {
             refresh();
         } else {
-            doctorGrid.setItems(clinicService.getDoctors_ByDepartment(filter.getValue()));
+            doctorGrid.setItems(clinicService.getDoctors_BySpecialization(filter.getValue()));
         }
     }
 

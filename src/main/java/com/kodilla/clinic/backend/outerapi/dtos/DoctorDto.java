@@ -54,12 +54,4 @@ public class DoctorDto {
         if (!surname.equals(doctorDto.surname)) return false;
         return email.equals(doctorDto.email);
     }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + surname.hashCode();
-        result = 31 * result + email.hashCode();
-        return result;
-    }
 }

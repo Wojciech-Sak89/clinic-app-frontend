@@ -1,6 +1,5 @@
-package com.kodilla.clinic.ui.views.patient;
+package com.kodilla.clinic.ui.patient;
 
-import ch.qos.logback.core.Layout;
 import com.kodilla.clinic.backend.enums.Stars;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
@@ -43,6 +42,7 @@ public class PatientEvaluatesFormView extends FormLayout {
     private Button addOpinionButton = new Button("Add opinion");
 
     private Button seeYourOpinionsButton = new Button("Browse your opinions");
+    private Button hideOpinionsButton = new Button("Hide");
 
     private ClinicService clinicService;
 
@@ -64,8 +64,10 @@ public class PatientEvaluatesFormView extends FormLayout {
                 doctorDto.getName() + " " + doctorDto.getSurname() + " M.D. " +
                         "Specialization: " + doctorDto.getSpecialization() +
                         " Department: " + doctorDto.getDepartment());
+        doctorsComboBox.setClearButtonVisible(true);
 
         rateCombobox.setItems(Stars.values());
+        rateCombobox.setClearButtonVisible(true);
 
         VerticalLayout peselSignInLayout = new VerticalLayout(peselField, signInButton);
 
@@ -115,6 +117,8 @@ public class PatientEvaluatesFormView extends FormLayout {
             greetingTextField.setValue("Hi " + currPatient.getName() + " " + currPatient.getSurname() + "!");
 
             staffEvaluationGrid.setItems(clinicService.getEvaluations_ByPatientId(currPatient.getPatient_id()));
+        } else {
+            Notification.show("Patient with this PESEL number not found. Please try enter valid PESEL number.");
         }
     }
 
@@ -156,22 +160,27 @@ public class PatientEvaluatesFormView extends FormLayout {
     }
 
     private Component opinionsLayout() {
-        VerticalLayout layout = new VerticalLayout();
+        VerticalLayout opinionsLayout = new VerticalLayout();
+
+        hideOpinionsButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        hideOpinionsButton.addClickListener(event -> opinionsLayout.setVisible(false));
 
         staffEvaluationGrid.setColumns("stars", "opinion", "entryDate");
         staffEvaluationGrid.addColumn(evaluation ->
-                "Patient: " +clinicService.getPatientById(evaluation.getPatient_Id()).getName()
-                        + " " + clinicService.getPatientById(evaluation.getPatient_Id()).getSurname());
+                clinicService.getPatientById(evaluation.getPatient_Id()).getName()
+                        + " " + clinicService.getPatientById(evaluation.getPatient_Id()).getSurname())
+                .setHeader("Patient");
         staffEvaluationGrid.addColumn(evaluation ->
-                "Doctor: " + clinicService.getDoctorById(evaluation.getDoctor_Id()).getName()
-                        + " " + clinicService.getDoctorById(evaluation.getDoctor_Id()).getSurname());
+                clinicService.getDoctorById(evaluation.getDoctor_Id()).getName()
+                        + " " + clinicService.getDoctorById(evaluation.getDoctor_Id()).getSurname())
+                .setHeader("Doctor");
 
         setColumnNames(staffEvaluationGrid);
 
         staffEvaluationGrid.setWidth("80em");
-        layout.add(staffEvaluationGrid);
+        opinionsLayout.add(hideOpinionsButton, staffEvaluationGrid);
 
-        return layout;
+        return opinionsLayout;
     }
 
     private void setColumnNames(Grid<StaffEvaluationDto> grid) {
