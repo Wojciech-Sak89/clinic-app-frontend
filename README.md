@@ -11,6 +11,7 @@ Frontend in Vaadin for private clinic. Diploma project prepared during Kodilla b
 
 ## Clinic App description
 The application consists of two parts: one for the Administrator and the other for the ordinary user (the clinic Patient).
+
 The Administrator can manually add, edit and delete patients, doctors, appointments, staff evaluations. The administrator can also add and modify doctors' schedules, separately modifying working hours for each day and adding emergency hours for urgent patients.
 
 Patients can get recommendations on what specialists to go to based on their symptoms. They can also evaluate and give opinions to the doctors whose services they have used.
