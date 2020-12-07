@@ -13,20 +13,20 @@ Frontend in Vaadin for private clinic. Diploma project prepared during Kodilla b
 
 ## Kodilla requirements
 1. REST endpoints
-  - Create at least 20 different endpoints.
-  - Use each of the known HTTP methods at least once: GET, POST, PUT and DELETE
+    - Create at least 20 different endpoints.
+    - Use each of the known HTTP methods at least once: GET, POST, PUT and DELETE
 2. Downloading data
-  - Use at least two external data sources.
+    - Use at least two external data sources.
 3. Scheduler
-  - Design and implement at least one scheduler usage.
+    - Design and implement at least one scheduler usage.
 4. Save records to database
-  - Implement at least 10 different data writing operations to the database.
+    - Implement at least 10 different data writing operations to the database.
 5. Tests
-  - Create tests covering at least 65% of the code.
+    - Create tests covering at least 65% of the code.
 6. Design Patterns
-  - Use at least two different design patterns.
+    - Use at least two different design patterns.
 7. View layer
-  - Use the Vaadin library to create a view layer of your application.
+    - Use the Vaadin library to create a view layer of your application.
   
 ### Ad. 1
   The system consists of 37 endpoints ready to use. Frontend effectively uses at least 25 of them with all known HTTP methods used at least once: GET, POST, PUT and DELETE.
