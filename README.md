@@ -28,22 +28,28 @@ Frontend in Vaadin for private clinic. Diploma project prepared during Kodilla b
 7 View layer
   • Use the Vaadin library to create a view layer of your application.
   
-Ad. 1
+### Ad. 1
   The system consists of 37 endpoints ready to use. Frontend effectively uses at least 25 of them with all known HTTP methods used at least once: GET, POST, PUT and DELETE.
-Ad. 2
+
+### Ad. 2
   System uses:
   1. Open weather API (https://openweathermap.org/api) - clinic patient at 2 PM a day before his visit recieves an email message with weather forecast for time and place of his      visit.
   2. API Medic (https://apimedic.com/)- at subpage "PATIENT - Specialist recommendation" (http://localhost:8081/specialistRecommendation) patient can get a recommendation to         which doctor he or she should sign up for based on his or hers symptoms.
-Ad. 3
+
+### Ad. 3
   Scheduler is used to send emails with reminder messages every day before working day at 2PM for those patients who have visit next day.
-Ad. 4
+
+### Ad. 4
  The system consists of 7 entities which gives the minimum of 14 data writing operations to the database (creation and edition).
-Ad. 5
+
+### Ad. 5
   Tests cover 86% of classes, 73% of methods and 69% of lines.
-Ad. 6
+
+### Ad. 6
   System uses 3 design patterns:
     1. Factory (backend: package com.kodilla.clinic.domain.schedule.factory.ScheduleFactory)
     2. Builder (backend: package com.kodilla.clinic.domain.schedule.ClinicDoctorSchedule)
     3. Singleton (frontend: com.kodilla.clinic.ui.patient.grid.ScheduledAppointmentsGridView)
-Ad. 7
+
+### Ad. 7
   Applied at https://github.com/Wojciech-Sak89/clinic-app-frontend
