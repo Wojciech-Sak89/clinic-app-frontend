@@ -46,10 +46,10 @@ Frontend in Vaadin for private clinic. Diploma project prepared during Kodilla b
   Tests cover 86% of classes, 73% of methods and 69% of lines.
 
 ### Ad. 6
-  System uses 3 design patterns:
-    1. Factory (backend: package com.kodilla.clinic.domain.schedule.factory.ScheduleFactory)
-    2. Builder (backend: package com.kodilla.clinic.domain.schedule.ClinicDoctorSchedule)
-    3. Singleton (frontend: com.kodilla.clinic.ui.patient.grid.ScheduledAppointmentsGridView)
+System uses 3 design patterns:
+1. Factory (backend: package com.kodilla.clinic.domain.schedule.factory.ScheduleFactory)
+2. Builder (backend: package com.kodilla.clinic.domain.schedule.ClinicDoctorSchedule)
+3. Singleton (frontend: com.kodilla.clinic.ui.patient.grid.ScheduledAppointmentsGridView)
 
 ### Ad. 7
   Applied at https://github.com/Wojciech-Sak89/clinic-app-frontend
