@@ -51,9 +51,10 @@ The most important functionality is the ability to sign up for visits to doctors
   Tests cover 86% of classes, 73% of methods and 69% of lines.
 
 ### Ad. 6
-System uses 2 design patterns:
+System uses 3 design patterns:
 1. Factory (backend: package com.kodilla.clinic.domain.schedule.factory.ScheduleFactory)
 2. Builder (backend: package com.kodilla.clinic.domain.schedule.ClinicDoctorSchedule)
+3. Singleton (backend: com.kodilla.clinic.outerapi.weather.forecast.personalized.PersonalizedForecast)
 
 ### Ad. 7
   Applied at https://github.com/Wojciech-Sak89/clinic-app-frontend
