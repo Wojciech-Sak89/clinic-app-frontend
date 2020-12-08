@@ -4,8 +4,9 @@ Frontend in Vaadin for private clinic. Diploma project prepared during Kodilla b
 ## Startup manual
 0. You might need to install node.js for global use on your PC for Vaadin (frontend framework) to work properly. You can get it here: https://nodejs.org/en/download/
 
-1. Run clinic-app-backend. Repository link: https://github.com/Wojciech-Sak89/clinic-app-backend
-2. Run clinic-app-frontend from this repository.
+1. Download and run clinic-app-backend. Repository link: https://github.com/Wojciech-Sak89/clinic-app-backend
+2. Download and run clinic-app-frontend from this repository.
+    2.1 In case of any problems with com.vaadin.flow.server, start dev server or node_modules delete \node_modules folder and using terminal try commands `npm install` and `npm install webpack-dev-server -g`.
 3. Run http://localhost:8081/ on your browser.
 4. Clinic App is ready to use!
 
@@ -40,7 +41,7 @@ The most important functionality is the ability to sign up for visits to doctors
 ### Ad. 2
   System uses:
   1. Open weather API (https://openweathermap.org/api) - clinic patient at 2 PM a day before his visit recieves an email message with weather forecast for time and place of his      visit.
-  2. API Medic (https://apimedic.com/)- at subpage "PATIENT - Specialist recommendation" (http://localhost:8081/specialistRecommendation) patient can get a recommendation to         which doctor he or she should sign up for based on his or hers symptoms.
+  2. API Medic (https://apimedic.com/) at subpage "PATIENT - Specialist recommendation" (http://localhost:8081/specialistRecommendation) patient can get a recommendation to         which doctor he or she should sign up for based on his or hers symptoms.
 
 ### Ad. 3
   Scheduler is used to send emails with reminder messages every day before working day at 2PM for those patients who have visit next day.

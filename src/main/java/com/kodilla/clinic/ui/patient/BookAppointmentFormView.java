@@ -134,7 +134,6 @@ public class BookAppointmentFormView extends FormLayout {
                 peselSignInLayout, decisionPreparationLayout_LowerPart, bookingLayout);
 
                 //SCHEDULED APPOINTMENTS GRID
-//        patientScheduledAppointmentsLayout = getPatientScheduledAppointmentsLayout();
         patientScheduledAppointmentsLayout = new ScheduledAppointmentsGridView(
                 filterMyAppointmentsByTime,
                 patientScheduledAppointmentsGrid,

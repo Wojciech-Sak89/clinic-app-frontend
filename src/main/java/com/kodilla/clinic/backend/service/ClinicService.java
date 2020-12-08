@@ -181,7 +181,6 @@ public class ClinicService {
     }
 
     //ApiMedic
-
     public List<SymptomDto> getSymptoms() {
         return clinicClient.getSymptoms();
     }
@@ -278,7 +277,7 @@ public class ClinicService {
     }
 
     public List<AppointmentDto> getAppointments_ByStatus_And_ByPatientId(Integer patient_id, Visits visits) {
-        Status status = getStatus(visits);
+        Status status = getStatus_VisitsConverter(visits);
 
         if (clinicClient.getAppointments() != null) {
             return clinicClient.getAppointments().stream()
@@ -293,7 +292,7 @@ public class ClinicService {
 
     }
 
-    private Status getStatus(Visits value) {
+    private Status getStatus_VisitsConverter(Visits value) {
         Status status = Status.FOR_EMERGENCY_ONLY;
         switch (value) {
             case PAST:

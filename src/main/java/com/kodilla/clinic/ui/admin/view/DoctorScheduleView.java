@@ -59,8 +59,6 @@ public class DoctorScheduleView extends VerticalLayout {
         add(toolbar, mainContent);
         setSizeFull();
         refresh();
-
-
     }
 
     private void update() {

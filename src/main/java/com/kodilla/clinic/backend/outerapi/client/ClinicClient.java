@@ -1,7 +1,6 @@
 package com.kodilla.clinic.backend.outerapi.client;
 
 import com.kodilla.clinic.backend.enums.Gender;
-import com.kodilla.clinic.backend.outerapi.config.ClinicConfig;
 import com.kodilla.clinic.backend.outerapi.dtos.AppointmentDto;
 import com.kodilla.clinic.backend.outerapi.dtos.DoctorDto;
 import com.kodilla.clinic.backend.outerapi.dtos.PatientDto;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -34,14 +32,14 @@ public class ClinicClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClinicClient.class);
 
     @Autowired
-    private ClinicConfig clinicConfig;
+    private RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ClinicURIs clinicURIs;
 
     //WORKING DAYS
     public List<WorkingDayDto> getWorkingDays() {
-        URI url = getWorkingDaysUri();
+        URI url = clinicURIs.getWorkingDaysUri();
 
         try {
             Optional<WorkingDayDto[]> workingDaysResponse = Optional.ofNullable(restTemplate.getForObject(url, WorkingDayDto[].class));
@@ -54,12 +52,12 @@ public class ClinicClient {
     }
 
     public void saveWorkingDay(WorkingDayDto workingDayDto) {
-        URI url = getWorkingDaysUri();
+        URI url = clinicURIs.getWorkingDaysUri();
         restTemplate.postForObject(url, workingDayDto, WorkingDayDto.class);
     }
 
     public void deleteWorkingDayById(Integer id) {
-        URI url = deleteWorkingDayUri(id);
+        URI url = clinicURIs.deleteWorkingDayUri(id);
         System.out.println(url);
 
         try {
@@ -72,7 +70,7 @@ public class ClinicClient {
 
     //EMERGENCY HOURS
     public List<EmergencyHourDto> getEmergencyHours() {
-        URI url = getEmergencyHoursUri();
+        URI url = clinicURIs.getEmergencyHoursUri();
 
         try {
             Optional<EmergencyHourDto[]> emergencyHoursResponse = Optional.ofNullable(restTemplate.getForObject(url, EmergencyHourDto[].class));
@@ -85,17 +83,17 @@ public class ClinicClient {
     }
 
     public void saveEmergencyHour(EmergencyHourDto emergencyHourDto) {
-        URI url = getEmergencyHoursUri();
+        URI url = clinicURIs.getEmergencyHoursUri();
         restTemplate.postForObject(url, emergencyHourDto, EmergencyHourDto.class);
     }
 
     public void updateEmergencyHour(EmergencyHourDto emergencyHourDto) {
-        URI url = getEmergencyHoursUri();
+        URI url = clinicURIs.getEmergencyHoursUri();
         restTemplate.put(url, emergencyHourDto);
     }
 
     public void deleteEmergencyHourById(Integer id) {
-        URI url = deleteEmergencyHourUri(id);
+        URI url = clinicURIs.deleteEmergencyHourUri(id);
         System.out.println(url);
 
         try {
@@ -109,7 +107,7 @@ public class ClinicClient {
 
     //SCHEDULES
     public List<ClinicDoctorScheduleDto> getSchedules() {
-        URI url = getSchedulesUri();
+        URI url = clinicURIs.getSchedulesUri();
         System.out.println(url);
 
         try {
@@ -125,12 +123,12 @@ public class ClinicClient {
 
     //DOCTORS
     public void saveDoctor(DoctorDto doctorDto) {
-        URI url = getDoctorsUri();
+        URI url = clinicURIs.getDoctorsUri();
         restTemplate.postForObject(url, doctorDto, DoctorDto.class);
     }
 
     public void deleteDoctorById(Integer doctor_id) {
-        URI url = deleteDoctorUri(doctor_id);
+        URI url = clinicURIs.deleteDoctorUri(doctor_id);
         System.out.println("Delete doctor: " + url);
 
         try {
@@ -142,7 +140,7 @@ public class ClinicClient {
     }
 
     public List<DoctorDto> getDoctors() {
-        URI url = getDoctorsUri();
+        URI url = clinicURIs.getDoctorsUri();
 
         try {
             Optional<DoctorDto[]> doctorsResponse = Optional.ofNullable(restTemplate.getForObject(url, DoctorDto[].class));
@@ -157,12 +155,12 @@ public class ClinicClient {
     //PATIENTS
     public void savePatient(PatientDto patientDto) {
         System.out.println(patientDto);
-        URI url = getPatientsUri();
+        URI url = clinicURIs.getPatientsUri();
         restTemplate.postForObject(url, patientDto, PatientDto.class);
     }
 
     public void deletePatientById(Integer patient_id) {
-        URI url = deletePatientUri(patient_id);
+        URI url = clinicURIs.deletePatientUri(patient_id);
         System.out.println("Delete aptient: " + url);
 
         try {
@@ -174,7 +172,7 @@ public class ClinicClient {
     }
 
     public List<PatientDto> getPatients() {
-        URI url = getPatientsUri();
+        URI url = clinicURIs.getPatientsUri();
 
         try {
             Optional<PatientDto[]> patientsResponse = Optional.ofNullable(restTemplate.getForObject(url, PatientDto[].class));
@@ -188,7 +186,7 @@ public class ClinicClient {
 
     //MEDIC API
     public List<SymptomDto> getSymptoms() {
-        URI url = getSymptomsUri();
+        URI url = clinicURIs.getSymptomsUri();
 
         try {
             Optional<SymptomDto[]> symptomsResponse = Optional.ofNullable(restTemplate.getForObject(url, SymptomDto[].class));
@@ -201,7 +199,7 @@ public class ClinicClient {
     }
 
     public List<RecommendationDto> getRecommendations(Integer birthYear, Gender gender, int[] symptomsIdsInts) {
-        URI url = getRecommendationsUri(birthYear, gender, symptomsIdsInts);
+        URI url = clinicURIs.getRecommendationsUri(birthYear, gender, symptomsIdsInts);
         System.out.println("getRecommendationsUri(): " + url);
 
         HttpHeaders headers = new HttpHeaders();
@@ -224,7 +222,7 @@ public class ClinicClient {
 
     //STAFF EVALUATIONS
     public List<StaffEvaluationDto> getStaffEvaluations() {
-        URI url = getEvaluationsUri();
+        URI url = clinicURIs.getEvaluationsUri();
 
         try {
             Optional<StaffEvaluationDto[]> evaluationsResponse = Optional.ofNullable(restTemplate.getForObject(url, StaffEvaluationDto[].class));
@@ -238,12 +236,12 @@ public class ClinicClient {
 
     public void saveStaffEvaluation(StaffEvaluationDto staffEvaluationDto) {
         System.out.println(staffEvaluationDto);
-        URI url = getEvaluationsUri();
+        URI url = clinicURIs.getEvaluationsUri();
         restTemplate.postForObject(url, staffEvaluationDto, PatientDto.class);
     }
 
     public void deleteStaffEvaluationById(Integer evaluation_id) {
-        URI url = deleteEvaluationUri(evaluation_id);
+        URI url = clinicURIs.deleteEvaluationUri(evaluation_id);
         System.out.println("Delete evaluation: " + url);
 
         try {
@@ -256,7 +254,7 @@ public class ClinicClient {
 
     //APPOINTMENTS
     public List<AppointmentDto> getAppointments() {
-        URI url = getAppointmentsUri();
+        URI url = clinicURIs.getAppointmentsUri();
 
         try {
             Optional<AppointmentDto[]> evaluationsResponse = Optional.ofNullable(restTemplate.getForObject(url, AppointmentDto[].class));
@@ -270,12 +268,12 @@ public class ClinicClient {
 
     public void saveAppointment(AppointmentDto appointmentDto) {
         System.out.println(appointmentDto);
-        URI url = getAppointmentsUri();
+        URI url = clinicURIs.getAppointmentsUri();
         restTemplate.postForObject(url, appointmentDto, AppointmentDto.class);
     }
 
     public void deleteAppointmentById(Integer appointment_id) {
-        URI url = deleteAppointmentUri(appointment_id);
+        URI url = clinicURIs.deleteAppointmentUri(appointment_id);
         System.out.println("Delete appointment: " + url);
 
         try {
@@ -284,85 +282,5 @@ public class ClinicClient {
         } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
-    }
-
-
-    //\\ URIs //\\
-    private URI getSymptomsUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getSymptoms())
-                .build().encode().toUri();
-    }
-
-    private URI getRecommendationsUri(Integer birthYear, Gender gender, int[] symptomsIdsInts) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getRecommendations())
-                .queryParam("birthYear", birthYear)
-                .queryParam("gender", gender)
-                .query("symptoms=" + Arrays.toString(symptomsIdsInts))
-                .build().encode().toUri();
-    }
-
-    private URI getWorkingDaysUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getWorkingDays())
-                .build().encode().toUri();
-    }
-
-    private URI deleteWorkingDayUri(Integer id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getWorkingDays() + "/" + id)
-                .build().encode().toUri();
-    }
-
-    private URI getSchedulesUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getSchedules())
-                .build().encode().toUri();
-    }
-
-    private URI getEmergencyHoursUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getEmergencyHours())
-                .build().encode().toUri();
-    }
-
-    private URI deleteEmergencyHourUri(Integer id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getEmergencyHours() + "/" + id)
-                .build().encode().toUri();
-    }
-
-    private URI getDoctorsUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getDoctors())
-                .build().encode().toUri();
-    }
-
-    private URI deleteDoctorUri(Integer id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getDoctors() + "/" + id)
-                .build().encode().toUri();
-    }
-
-    private URI getPatientsUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getPatients())
-                .build().encode().toUri();
-    }
-
-    private URI deletePatientUri(Integer id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getPatients() + "/" + id)
-                .build().encode().toUri();
-    }
-
-    private URI getEvaluationsUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getStaffEvaluations())
-                .build().encode().toUri();
-    }
-
-    private URI deleteEvaluationUri(Integer id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getStaffEvaluations() + "/" + id)
-                .build().encode().toUri();
-    }
-
-    private URI getAppointmentsUri() {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getAppointments())
-                .build().encode().toUri();
-    }
-
-    private URI deleteAppointmentUri(Integer appointment_id) {
-        return UriComponentsBuilder.fromHttpUrl(clinicConfig.getClinicApiEndpoint() + clinicConfig.getAppointments() + "/" + appointment_id)
-                .build().encode().toUri();
     }
 }

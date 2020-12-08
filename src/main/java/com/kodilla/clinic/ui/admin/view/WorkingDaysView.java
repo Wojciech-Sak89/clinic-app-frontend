@@ -73,11 +73,13 @@ public class WorkingDaysView extends VerticalLayout {
         String propertyId2 = "startHour";
         String propertyId3 = "endHour";
         String propertyId4 = "schedulesIds";
+
         Grid.Column<WorkingDayDto> col0 = grid.getColumnByKey(propertyId0);
         Grid.Column<WorkingDayDto> col1 = grid.getColumnByKey(propertyId1);
         Grid.Column<WorkingDayDto> col2 = grid.getColumnByKey(propertyId2);
         Grid.Column<WorkingDayDto> col3 = grid.getColumnByKey(propertyId3);
         Grid.Column<WorkingDayDto> col4 = grid.getColumnByKey(propertyId4);
+
         if (col0 != null && col1 != null && col2 != null && col3 != null && col4 != null) {
             col0.setHeader("ID (Working Day)");
             col1.setHeader("Weekday");

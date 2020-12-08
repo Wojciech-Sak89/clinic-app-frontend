@@ -92,12 +92,11 @@ public class ScheduledAppointmentsGridView extends VerticalLayout {
                                                 " | Visit time: " + gridCurrVal.getDateTime().format(formatter));
                             }
                         });
-        this.patientAppointmentToCancelTextField.setMinWidth("40em");
-
         this.patientScheduledAppointmentsGrid.setMinWidth("90em");
 
-        myScheduledAppointmentsLayout.add(layoutTop, patientScheduledAppointmentsGrid);
+        this.patientAppointmentToCancelTextField.setMinWidth("40em");
 
+        myScheduledAppointmentsLayout.add(layoutTop, patientScheduledAppointmentsGrid);
         add(myScheduledAppointmentsLayout);
     }
 }
