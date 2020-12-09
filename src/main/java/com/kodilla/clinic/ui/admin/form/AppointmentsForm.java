@@ -130,10 +130,10 @@ public class AppointmentsForm extends FormLayout {
             if(clinicService.getDoctorById(appointmentDto.getDoctorId()) != null) {
                 clinicService.saveAppointment(appointmentDto);
             } else {
-                Notification.show("Existing doctor is needed to set an appointment!");
+                Notification.show("Could not save. Existing doctor is needed to set an appointment!");
             }
         } else {
-            Notification.show("Doctor ID and appointment Status is required");
+            Notification.show("Could not save. Doctor ID and appointment Status is required!");
         }
 
         appointmentsView.refresh();

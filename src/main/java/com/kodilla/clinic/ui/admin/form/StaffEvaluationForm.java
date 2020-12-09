@@ -109,7 +109,7 @@ public class StaffEvaluationForm extends FormLayout {
     }
 
     private void save() {
-        if (!patient_Id.isEmpty() && doctor_Id.isEmpty()) {
+        if (!patient_Id.isEmpty() && !doctor_Id.isEmpty()) {
             StaffEvaluationDto staffEvaluationDto = binder.getBean();
 
             if(clinicService.getDoctorById(staffEvaluationDto.getDoctor_Id()) != null
@@ -117,7 +117,7 @@ public class StaffEvaluationForm extends FormLayout {
                 clinicService.saveStaffEvaluation(staffEvaluationDto);
             }
         } else {
-            Notification.show("Patient ID and Doctor Id required");
+            Notification.show("Could not be saved. Patient ID and Doctor ID required");
         }
 
         staffEvaluationsView.refresh();
