@@ -8,6 +8,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,37 +37,41 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        RouterLink workingDaysLink = new RouterLink("ADMIN - Working Days", WorkingDaysView.class);
+        Label adminLabel = new Label("ADMIN");
+        Label patientLabel = new Label("PATIENT");
+
+        RouterLink workingDaysLink = new RouterLink("Working Days", WorkingDaysView.class);
         workingDaysLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink emergencyHoursLink = new RouterLink("ADMIN - Emergency Hours", EmergencyHoursView.class);
+        RouterLink emergencyHoursLink = new RouterLink("Emergency Hours", EmergencyHoursView.class);
         emergencyHoursLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink doctorsLink = new RouterLink("ADMIN - Doctors", DoctorsView.class);
+        RouterLink doctorsLink = new RouterLink("Doctors", DoctorsView.class);
         doctorsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink docSchedulesLink = new RouterLink("ADMIN - Doctors schedules", DoctorScheduleView.class);
+        RouterLink docSchedulesLink = new RouterLink("Doctors schedules", DoctorScheduleView.class);
         docSchedulesLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink patientsLink = new RouterLink("ADMIN - Patients", PatientsView.class);
+        RouterLink patientsLink = new RouterLink("Patients", PatientsView.class);
         patientsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink evaluationLink = new RouterLink("ADMIN - Staff evaluations", StaffEvaluationsView.class);
+        RouterLink evaluationLink = new RouterLink("Staff evaluations", StaffEvaluationsView.class);
         evaluationLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink appointmentsLink = new RouterLink("ADMIN - Appointments", AppointmentsView.class);
+        RouterLink appointmentsLink = new RouterLink("Appointments", AppointmentsView.class);
         appointmentsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink recommendationLink = new RouterLink("PATIENT - Specialist recommendation", RecommendationFormView.class);
+        RouterLink recommendationLink = new RouterLink("Specialist recommendation", RecommendationFormView.class);
         recommendationLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink opinionLink = new RouterLink("PATIENT - Opinion", PatientEvaluatesFormView.class);
+        RouterLink opinionLink = new RouterLink("Opinion", PatientEvaluatesFormView.class);
         opinionLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink reserveDoctorAppointmentLink = new RouterLink("PATIENT - Book doctor appointment", BookAppointmentFormView.class);
+        RouterLink reserveDoctorAppointmentLink = new RouterLink("Book doctor appointment", BookAppointmentFormView.class);
         reserveDoctorAppointmentLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(
+                adminLabel,
                 workingDaysLink,
                 emergencyHoursLink,
                 doctorsLink,
@@ -75,6 +80,7 @@ public class MainLayout extends AppLayout {
                 evaluationLink,
                 appointmentsLink,
 
+                patientLabel,
                 recommendationLink,
                 opinionLink,
                 reserveDoctorAppointmentLink
